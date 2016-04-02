@@ -1,0 +1,23 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <span ng-bind="'Scorecard'" class="h4" />
+    </div>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th ng-bind="'Hole'" class="col-md-1" />
+            <th ng-repeat="subgame in game.subgames" ng-bind="subgame.user.name" />
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="hole in game.course.holes" ng-init="holeIndex = $index">
+            <td ng-bind="(holeIndex + 1) + '.'" />
+            <td ng-repeat="subgame in game.subgames" ng-bind="subgame.splits | getat: holeIndex" />
+        </tr>
+        <tr>
+            <th ng-bind="'Tot:'" />
+            <th ng-repeat="subgame in game.subgames" ng-bind="subgame.score" />
+        </tr>
+        </tbody>
+    </table>
+</div>

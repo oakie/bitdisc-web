@@ -1,0 +1,35 @@
+<h1>bitdisc</h1>
+<div class="row">
+    <div class="col-md-4">
+        <panel title="'Users'">
+            <panel-list>
+                <a ng-repeat="user in users" class="list-group-item">
+                    <user object="user" />
+                </a>
+                <li ng-show="!users" ng-bind="'No users'" class="list-group-item" />
+            </panel-list>
+        </panel>
+    </div>
+
+    <div class="col-md-4">
+        <panel title="'Courses'">
+            <panel-list>
+                <a ng-repeat="course in courses" class="list-group-item" href="#/course/{{course.id}}">
+                    <course object="course" />
+                </a>
+                <li ng-show="!users" ng-bind="'No courses'" class="list-group-item" />
+            </panel-list>
+        </panel>
+    </div>
+
+    <div class="col-md-4">
+        <panel title="'Games'">
+            <panel-list>
+                <a ng-repeat="game in games" class="list-group-item" href="#/game/{{game.id}}">
+                    <game object="game" />
+                </a>
+                <li ng-show="!games" ng-bind="'No games'" class="list-group-item" />
+            </panel-list>
+        </panel>
+    </div>
+</div>
