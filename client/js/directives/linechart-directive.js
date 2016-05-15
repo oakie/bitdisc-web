@@ -20,11 +20,9 @@ var directive = function($sce) {
       style: '@'
     },
     link: function($scope, $elem, $attr) {
+      $scope.container = $elem.find('canvas')[0].getContext('2d');
+
       $scope.init = function() {
-        $scope.container = $elem.find('canvas')[0].getContext('2d');
-      };
-      
-      $scope.$watch('data', function() {
         if(!$scope.data) return;
 
         for(var i = 0; i < $scope.data.datasets.length; ++i) {
@@ -44,7 +42,11 @@ var directive = function($sce) {
         });
 
         $scope.legend = $sce.trustAsHtml(generateLegend($scope.data.datasets));
-      });
+      };
+      
+      $scope.$watch('data', function() {
+        $scope.init();
+      }, true);
 
       $scope.init();
     }

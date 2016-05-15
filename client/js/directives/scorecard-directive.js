@@ -23,6 +23,10 @@ var directive = function(ModalService) {
           });
         }
       };
+
+      $scope.finish = function() {
+        
+      };
       
       $scope.init();
     }

@@ -16,8 +16,11 @@
         </tr>
         <tr>
             <th ng-bind="'Tot:'" />
-            <th ng-repeat="subgame in game.subgames" ng-bind="subgame.score" />
+            <th ng-repeat="subgame in game.subgames" ng-bind="subgame.score()" />
         </tr>
         </tbody>
     </table>
+    <div class="panel-footer">
+        <a class="btn btn-primary" style="width: 100%;" ng-click="finish()">Finish game</a>
+    </div>
 </div>

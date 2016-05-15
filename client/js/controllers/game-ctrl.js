@@ -2,26 +2,22 @@
 var Chart = require('chart.js');
 
 var ctrl = function($scope, $routeParams, UserService, CourseService, GameService) {
+  $scope.game = null;
+  $scope.params = $routeParams;
+  $scope.chart = {};
+
+  GameService.get($scope.params.id).then(function(game) {
+    $scope.game = game;
+  });
+
   $scope.init = function() {
-    $scope.params = $routeParams;
-    $scope.chart = {};
-
-    GameService.get($scope.params.id).then(function(game) {
-      $scope.game = game;
-
-      for(var i = 0; i < game.subgames.length; ++i) {
-        var subgame = game.subgames[i];
-        subgame.score = 0;
-        if (subgame.splits) {
-          for(var j = 0; j < subgame.splits.length; ++j) {
-            subgame.score += subgame.splits[j];
-          }
-        }
-      }
-
-      generateCharts(game);
-    });
+    if(!$scope.game) { return; }
+    generateCharts($scope.game);
   };
+
+  $scope.$watch('game', function() {
+    $scope.init();
+  }, true);
 
   var generateCharts = function(game) {
     var acc = {};

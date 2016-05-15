@@ -39,7 +39,6 @@ var directive = function($location, ModalService, CourseService, UserService, Ga
       };
 
       $scope.addPlayer = function(user) {
-        console.log('add');
         if($scope.setup.players.indexOf(user) > -1) {
           return;
         }

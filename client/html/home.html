@@ -30,7 +30,7 @@
                 <span class="clearfix" />
             </panel-head>
             <panel-list>
-                <a ng-repeat="game in games" class="list-group-item" href="#/game/{{game.id}}">
+                <a ng-repeat="game in games | orderBy: '-start'" class="list-group-item" href="#/game/{{game.id}}">
                     <game object="game" />
                 </a>
                 <li ng-show="!games" ng-bind="'No games'" class="list-group-item" />

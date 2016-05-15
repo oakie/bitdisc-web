@@ -2,9 +2,9 @@
 
 <div class="row">
     <div class="col-md-6">
-        <panel title="'Game info'">
+        <panel title="'Game info'" ng-if="game">
             <panel-list>
-                <a ng-show="game" class="list-group-item"><strong ng-bind="'Course'" /><span ng-bind="game.course.name" class="pull-right" /></a>
+                <a ng-show="game" href="#/course/{{ game.course.id }}" class="list-group-item"><strong ng-bind="'Course'" /><span ng-bind="game.course.name" class="pull-right" /></a>
                 <a ng-show="game" class="list-group-item"><strong ng-bind="'Updated'" /><span ng-bind="game.timestamp | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
                 <a ng-show="game.start" class="list-group-item"><strong ng-bind="'Started'" /><span ng-bind="game.start | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
                 <a ng-show="game.end" class="list-group-item"><strong ng-bind="'Ended'" /><span ng-bind="game.end | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
@@ -12,16 +12,16 @@
             </panel-list>
         </panel>
 
-        <panel title="'Players'">
+        <panel title="'Players'" ng-if="game">
             <panel-list>
-                <a ng-repeat="subgame in game.subgames | orderBy: 'score'" class="list-group-item">
+                <a ng-repeat="subgame in game.subgames | orderBy: 'score()'" class="list-group-item">
                     <div>
                         <user object="subgame.user">
                             <left>
                                 <strong ng-bind="$index + 1" />
                             </left>
                             <right>
-                                <strong ng-bind="subgame.score" />
+                                <strong ng-bind="subgame.score()" />
                             </right>
                         </user>
                     </div>
@@ -30,7 +30,7 @@
             </panel-list>
         </panel>
 
-        <panel title="'Accumulated score'">
+        <panel title="'Accumulated score'" ng-if="game">
             <panel-body>
                 <linechart data="chart.acc" style="height: 200px;" />
             </panel-body>
@@ -38,6 +38,6 @@
     </div>
 
     <div class="col-md-6">
-        <scorecard object="game" editable="true" />
+        <scorecard object="game" editable="game && !game.end" ng-if="game" />
     </div>
 </div>

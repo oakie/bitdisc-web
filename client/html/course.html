@@ -1,18 +1,6 @@
 <h1 ng-bind="course.name"></h1>
 <div class="row">
     <div class="col-md-4">
-        <panel title="'Holes'">
-            <panel-list>
-                <a ng-repeat="hole in course.holes" class="list-group-item">
-                    <strong ng-bind="$index + 1" class="col-md-2" />
-                    <hole object="hole" />
-                </a>
-                <li ng-show="!course.holes" ng-bind="'Loading holes'" class="list-group-item" />
-            </panel-list>
-        </panel>
-    </div>
-
-    <div class="col-md-4">
         <panel title="'Course info'">
             <panel-list>
                 <a ng-show="course" class="list-group-item"><strong ng-bind="'Name'" /><span ng-bind="course.name" class="pull-right" /></a>
@@ -21,6 +9,18 @@
                 <a ng-show="course" class="list-group-item"><strong ng-bind="'Par'" /><span ng-bind="par" class="pull-right" /></a>
                 <a ng-show="course" class="list-group-item"><strong ng-bind="'Distance'" /><span ng-bind="distance + ' m'" class="pull-right" /></a>
                 <li ng-show="!course" ng-bind="'Loading course'" class="list-group-item" />
+            </panel-list>
+        </panel>
+    </div>
+
+    <div class="col-md-4">
+        <panel title="'Holes'">
+            <panel-list>
+                <a ng-repeat="hole in course.holes" class="list-group-item">
+                    <strong ng-bind="$index + 1" class="col-md-2" />
+                    <hole object="hole" />
+                </a>
+                <li ng-show="!course.holes" ng-bind="'Loading holes'" class="list-group-item" />
             </panel-list>
         </panel>
     </div>
