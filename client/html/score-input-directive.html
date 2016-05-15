@@ -1,0 +1,20 @@
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" ng-bind="title" />
+            </div>
+            <table class="table">
+                <tbody>
+                    <tr ng-repeat="subgame in game.subgames">
+                        <td class="vert-align"><span class="h4" ng-bind="subgame.user.tag" /></td>
+                        <td class="col-sm-1 text-right vert-align"><a class="btn btn-default btn-md" ng-click="decScore(subgame)"><glyph name="minus" /></a></td>
+                        <td class="col-sm-1 text-center vert-align"><span class="h4" ng-bind="subgame.splits | getat: index" /></td>
+                        <td class="col-sm-1 text-left vert-align"><a class="btn btn-default btn-md" ng-click="incScore(subgame)"><glyph name="plus" /></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

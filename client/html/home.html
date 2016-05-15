@@ -23,7 +23,12 @@
     </div>
 
     <div class="col-md-4">
-        <panel title="'Games'">
+        <panel>
+            <panel-head>
+                <span class="h4">Games</span>
+                <a class="pull-right text-white" ng-click="openGameSetupModal()"><glyph name="plus" /></a>
+                <span class="clearfix" />
+            </panel-head>
             <panel-list>
                 <a ng-repeat="game in games" class="list-group-item" href="#/game/{{game.id}}">
                     <game object="game" />

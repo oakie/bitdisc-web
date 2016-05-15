@@ -49,7 +49,7 @@ var ctrl = function($scope, $routeParams, UserService, CourseService, GameServic
 
     $scope.chart.acc = acc;
   };
-
+  
   $scope.init();
 };
 ctrl.$inject = ['$scope', '$routeParams', 'UserService', 'CourseService', 'GameService'];

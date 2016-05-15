@@ -1,7 +1,5 @@
 <div class="panel panel-primary">
-    <div class="panel-heading">
-        <span ng-bind="title" class="h4" />
-    </div>
+    <div class="panel-heading" ng-transclude="head"><span class="h4" ng-bind="title" /></div>
     <div ng-if="contains.body()" class="panel-body" ng-transclude="body" />
     <ul ng-if="contains.list()" class="list-group" ng-transclude="list" />
     <table ng-if="contains.table()" class="table" ng-transclude="table" />

@@ -2,16 +2,8 @@
 
 var Firebase = require('firebase');
 
-var service = function(config, $q, CourseService, UserService) {
+var service = function(config, $q, AuthService, CourseService, UserService) {
   var ref = new Firebase(config.firebase.url);
-
-  var getGames = function() {
-    var defer = $q.defer();
-    ref.child('game').once('value').then(function(snapshot) {
-      defer.resolve(snapshot.val());
-    });
-    return defer.promise;
-  };
 
   var getGame = function(id) {
     var defer = $q.defer();
@@ -59,18 +51,32 @@ var service = function(config, $q, CourseService, UserService) {
     return defer.promise;
   };
 
-  return {
-    list: getGames,
-    get: function(id) {
-      var defer = $q.defer();
+  var list = function() {
+    var defer = $q.defer();
+    AuthService.get().then(function() {
+      ref.child('game').once('value').then(function(snapshot) {
+        defer.resolve(snapshot.val());
+      });
+    });
+    return defer.promise;
+  };
+
+  var get = function(id) {
+    var defer = $q.defer();
+    AuthService.get().then(function() {
       getGame(id).then(function(game) {
         populateGame(game).then(function(game) {
           defer.resolve(game);
         });
       });
-      return defer.promise;
-    }
+    });
+    return defer.promise;
+  };
+
+  return {
+    list: list,
+    get: get
   };
 };
-service.$inject = ['Config', '$q', 'CourseService', 'UserService'];
+service.$inject = ['Config', '$q', 'AuthService', 'CourseService', 'UserService'];
 module.exports = service;

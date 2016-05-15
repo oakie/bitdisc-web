@@ -1,6 +1,6 @@
 'use strict';
 
-var ctrl = function($scope, UserService, CourseService, GameService) {
+var ctrl = function($scope, UserService, CourseService, GameService, ModalService) {
   $scope.init = function() {
     UserService.list().then(function(items) {
       $scope.users = listify(items);
@@ -10,6 +10,14 @@ var ctrl = function($scope, UserService, CourseService, GameService) {
     });
     GameService.list().then(function(items) {
       $scope.games = listify(items);
+    });
+  };
+
+  $scope.openGameSetupModal = function() {
+    var context = {id: 'game-setup', data: {}};
+    var gameSetupPromise = ModalService.openModal(context);
+    gameSetupPromise.then(function (val) {
+      console.log(val);
     });
   };
 
@@ -23,5 +31,5 @@ var ctrl = function($scope, UserService, CourseService, GameService) {
 
   $scope.init();
 };
-ctrl.$inject = ['$scope', 'UserService', 'CourseService', 'GameService'];
+ctrl.$inject = ['$scope', 'UserService', 'CourseService', 'GameService', 'ModalService'];
 module.exports = ctrl;

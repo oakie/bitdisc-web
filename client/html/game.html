@@ -2,11 +2,29 @@
 
 <div class="row">
     <div class="col-md-6">
+        <panel title="'Game info'">
+            <panel-list>
+                <a ng-show="game" class="list-group-item"><strong ng-bind="'Course'" /><span ng-bind="game.course.name" class="pull-right" /></a>
+                <a ng-show="game" class="list-group-item"><strong ng-bind="'Updated'" /><span ng-bind="game.timestamp | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
+                <a ng-show="game.start" class="list-group-item"><strong ng-bind="'Started'" /><span ng-bind="game.start | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
+                <a ng-show="game.end" class="list-group-item"><strong ng-bind="'Ended'" /><span ng-bind="game.end | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
+                <li ng-show="!game" ng-bind="'Loading game'" class="list-group-item" />
+            </panel-list>
+        </panel>
+
         <panel title="'Players'">
             <panel-list>
                 <a ng-repeat="subgame in game.subgames | orderBy: 'score'" class="list-group-item">
-                    <strong ng-bind="$index + 1" class="col-md-2" />
-                    <subgame object="subgame" />
+                    <div>
+                        <user object="subgame.user">
+                            <left>
+                                <strong ng-bind="$index + 1" />
+                            </left>
+                            <right>
+                                <strong ng-bind="subgame.score" />
+                            </right>
+                        </user>
+                    </div>
                 </a>
                 <li ng-show="!game.subgames" ng-bind="'Loading players'" class="list-group-item" />
             </panel-list>
@@ -20,16 +38,6 @@
     </div>
 
     <div class="col-md-6">
-        <panel title="'Game info'">
-            <panel-list>
-                <a ng-show="game" class="list-group-item"><strong ng-bind="'Course'" /><span ng-bind="game.course.name" class="pull-right" /></a>
-                <a ng-show="game" class="list-group-item"><strong ng-bind="'Updated'" /><span ng-bind="game.timestamp | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
-                <a ng-show="game.start" class="list-group-item"><strong ng-bind="'Started'" /><span ng-bind="game.start | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
-                <a ng-show="game.end" class="list-group-item"><strong ng-bind="'Ended'" /><span ng-bind="game.end | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
-                <li ng-show="!game" ng-bind="'Loading game'" class="list-group-item" />
-            </panel-list>
-        </panel>
-
-        <scorecard object="game" />
+        <scorecard object="game" editable="true" />
     </div>
 </div>

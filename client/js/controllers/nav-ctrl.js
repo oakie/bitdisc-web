@@ -1,14 +1,24 @@
 'use strict';
 
 var ctrl = function($scope, $location, AuthService) {
-  $scope.init = function() {
-    AuthService.signin().then(function(token) {
-      console.log(token);
-    });
+  var onAuth = function(auth) {
+    $scope.auth = auth;
   };
+  AuthService.onauth(onAuth);
+  AuthService.get().then(onAuth);
+
+  $scope.init = function() {};
 
   $scope.isActive = function(route) {
     return route === $location.path();
+  };
+
+  $scope.signIn = function () {
+    AuthService.signin();
+  };
+
+  $scope.signOut = function() {
+    AuthService.signout();
   };
 
   $scope.init();

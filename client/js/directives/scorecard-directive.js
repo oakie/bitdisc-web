@@ -1,20 +1,32 @@
 'use strict';
 
-var directive = function(GameService) {
+var directive = function(ModalService) {
   return {
     restrict: 'E',
     templateUrl: 'scorecard-directive.html',
     scope: {
-      game: '=object'
+      game: '=object',
+      editable: '=?'
     },
     link: function($scope, $elem, $attr) {
-      $scope.init = function() {};
+      $scope.init = function() {
+        $scope.editable = $scope.editable || false;
+      };
 
       $attr.$observe('game', function() {});
 
+      $scope.openScoreInputModal = function(index) {
+        if($scope.editable) {
+          var context = {id: 'score-input', data: {game: $scope.game, index: index}};
+          ModalService.openModal(context).then(function (val) {
+            console.log(val);
+          });
+        }
+      };
+      
       $scope.init();
     }
   };
 };
-directive.$inject = ['GameService'];
+directive.$inject = ['ModalService'];
 module.exports = directive;

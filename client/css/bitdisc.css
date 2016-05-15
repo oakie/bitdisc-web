@@ -1,6 +1,19 @@
 body {
     padding-top: 60px;
 }
+
+.text-white {
+    color: white;
+}
+
 .panel > .list-group {
     margin: 1px;
+}
+
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
+}
+
+.modal-content .table {
+    margin-bottom: 0;
 }

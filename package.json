@@ -3,11 +3,10 @@
   "description": "disc golf score card application web app",
   "author": "Jonas Ekskog <jonas.ekskog@gmail.com>",
   "license": "MIT",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "dependencies": {
     "angular": "^1.5.3",
     "angular-route": "^1.5.3",
-    "angularfire": "^1.2.0",
     "bootstrap": "^3.3.6",
     "chart.js": "^1.1.0",
     "express": "^4.13.4",

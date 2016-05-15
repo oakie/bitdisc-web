@@ -5,6 +5,7 @@ var directive = function() {
     restrict: 'E',
     templateUrl: 'panel-directive.html',
     transclude: {
+      head: '?panelHead',
       body: '?panelBody',
       list: '?panelList',
       table: '?panelTable'

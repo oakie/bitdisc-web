@@ -6,11 +6,11 @@
         <thead>
         <tr>
             <th ng-bind="'Hole'" class="col-md-1" />
-            <th ng-repeat="subgame in game.subgames" ng-bind="subgame.user.name" />
+            <th ng-repeat="subgame in game.subgames" ng-bind="subgame.user.tag" />
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="hole in game.course.holes" ng-init="holeIndex = $index">
+        <tr ng-repeat="hole in game.course.holes" ng-init="holeIndex = $index" ng-click="openScoreInputModal(holeIndex)">
             <td ng-bind="(holeIndex + 1) + '.'" />
             <td ng-repeat="subgame in game.subgames" ng-bind="subgame.splits | getat: holeIndex" />
         </tr>

@@ -2,16 +2,8 @@
 
 var Firebase = require('firebase');
 
-var service = function(config, $q) {
+var service = function(config, $q, AuthService) {
   var ref = new Firebase(config.firebase.url);
-
-  var getCourses = function() {
-    var defer = $q.defer();
-    ref.child('course').once('value').then(function(snapshot) {
-      defer.resolve(snapshot.val());
-    });
-    return defer.promise;
-  };
 
   var getCourse = function(id) {
     var defer = $q.defer();
@@ -52,18 +44,32 @@ var service = function(config, $q) {
     return defer.promise;
   };
 
-  return {
-    list: getCourses,
-    get: function(id) {
-      var defer = $q.defer();
+  var list = function() {
+    var defer = $q.defer();
+    AuthService.get().then(function(auth) {
+      ref.child('course').once('value').then(function (snapshot) {
+        defer.resolve(snapshot.val());
+      });
+    });
+    return defer.promise;
+  };
+
+  var get = function(id) {
+    var defer = $q.defer();
+    AuthService.get().then(function(auth) {
       getCourse(id).then(function(course) {
         populateCourse(course).then(function(course) {
           defer.resolve(course);
         })
       });
-      return defer.promise;
-    }
+    });
+    return defer.promise;
+  };
+
+  return {
+    list: list,
+    get: get
   };
 };
-service.$inject = ['Config', '$q'];
+service.$inject = ['Config', '$q', 'AuthService'];
 module.exports = service;
