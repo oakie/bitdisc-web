@@ -6,7 +6,7 @@ var directive = function(ModalService) {
     templateUrl: 'score-input-directive.html',
     scope: true,
     link: function($scope, $elem, $attr) {
-      ModalService.registerModalScope('score-input', $scope);
+      ModalService.register('score-input', $scope);
       angular.element($elem.children()[0]).on('hidden.bs.modal', function () {
         $scope.defer.resolve('closed score input');
       });

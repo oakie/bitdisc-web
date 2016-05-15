@@ -9,30 +9,32 @@
                 <form>
                     <div class="form-group">
                         <label class="control-label" for="courseSelect">Select course</label>
-                        <select class="form-control" id="courseSelect" ng-model="setup.course">
-                            <option ng-repeat="course in courses" value="{{ course.id }}" ng-bind="course.name + ' - ' + course.city" />
+                        <select class="form-control" id="courseSelect" ng-model="setup.course" ng-options="(course.name + ' - ' + course.city) for course in courses | orderBy: 'name'">
+                            <option value="">Select a course</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-12 control-label">Select players</label>
-                        <ul class="col-sm-6" style="max-height: 200px; overflow-y: auto;">
-                            <li ng-repeat="user in users" class="list-group-item">
-                                <user object="user" />
-                            </li>
-                            <li ng-show="!users" ng-bind="'No users'" class="list-group-item" />
-                        </ul>
-                        <ul class="col-sm-6">
-                            <li ng-repeat="user in setup.players" class="list-group-item">
-                                <user object="user" />
+                        <label class="control-label" for="playerSelect">Select players</label>
+                        <ul style="padding-left: 0;">
+                            <li ng-repeat="user in setup.players | orderBy: 'name'" class="list-group-item">
+                                <user object="user">
+                                    <right>
+                                        <a class="btn btn-default" ng-click="removePlayer(user)"><glyph name="remove" /></a>
+                                    </right>
+                                </user>
                             </li>
                             <li ng-show="setup.players.length === 0" ng-bind="'No players added'" class="list-group-item" />
                         </ul>
+                        <select class="form-control" id="playerSelect" ng-model="selectedPlayer" ng-options="user.name for user in users | orderBy: 'name' track by user.id" ng-change="addPlayer(selectedPlayer)">
+                            <option value="">Add a player</option>
+                        </select>
                     </div>
-
-                    <button type="button" class="btn btn-primary pull-right" ng-click="proceed()">Start game</button>
-                    <span class="clearfix" />
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="proceed()">Start game</button>
             </div>
         </div>
     </div>

@@ -18,7 +18,7 @@ var directive = function(ModalService) {
       $scope.openScoreInputModal = function(index) {
         if($scope.editable) {
           var context = {id: 'score-input', data: {game: $scope.game, index: index}};
-          ModalService.openModal(context).then(function (val) {
+          ModalService.open(context).then(function (val) {
             console.log(val);
           });
         }

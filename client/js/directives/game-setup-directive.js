@@ -1,12 +1,12 @@
 'use strict';
 
-var directive = function(ModalService, CourseService, UserService, GameService) {
+var directive = function($location, ModalService, CourseService, UserService, GameService) {
   return {
     restrict: 'E',
     templateUrl: 'game-setup-directive.html',
     scope: true,
     link: function($scope, $elem, $attr) {
-      ModalService.registerModalScope('game-setup', $scope);
+      ModalService.register('game-setup', $scope);
       angular.element($elem.children()[0]).on('hidden.bs.modal', function () {
         $scope.defer.resolve('closed game setup');
       });
@@ -14,15 +14,16 @@ var directive = function(ModalService, CourseService, UserService, GameService) 
       $scope.init = function() {
         if(!$scope.context) { return; }
         $scope.defer = $scope.context.defer;
+        $scope.selectedPlayer = null;
         $scope.setup = {
           course: null,
           players: []
         };
         CourseService.list().then(function(courses) {
-          $scope.courses = courses;
+          $scope.courses = listify(courses);
         });
         UserService.list().then(function (users) {
-          $scope.users = users;
+          $scope.users = listify(users);
         });
       };
 
@@ -31,12 +32,39 @@ var directive = function(ModalService, CourseService, UserService, GameService) 
       });
 
       $scope.proceed = function() {
+        GameService.create($scope.setup).then(function(game) {
+          $location.path('/game/' + game.id);
+          ModalService.close();
+        });
+      };
 
+      $scope.addPlayer = function(user) {
+        console.log('add');
+        if($scope.setup.players.indexOf(user) > -1) {
+          return;
+        }
+        $scope.setup.players.push(user);
+        $scope.selectedPlayer = null;
+      };
+
+      $scope.removePlayer = function(user) {
+        var index = $scope.setup.players.indexOf(user);
+        if(index > -1) {
+          $scope.setup.players.splice(index, 1);
+        }
+      };
+
+      var listify = function(items) {
+        var list = [];
+        $.each(items, function(key, value) {
+          list.push(value);
+        });
+        return list;
       };
 
       $scope.init();
     }
   };
 };
-directive.$inject = ['ModalService', 'CourseService', 'UserService', 'GameService'];
+directive.$inject = ['$location', 'ModalService', 'CourseService', 'UserService', 'GameService'];
 module.exports = directive;
