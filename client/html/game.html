@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <panel title="'Game info'" ng-if="game">
+        <panel heading="'Game info'" ng-if="game">
             <panel-list>
                 <a ng-show="game" href="#/course/{{ game.course.id }}" class="list-group-item"><strong ng-bind="'Course'" /><span ng-bind="game.course.name" class="pull-right" /></a>
                 <a ng-show="game" class="list-group-item"><strong ng-bind="'Updated'" /><span ng-bind="game.timestamp | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>
@@ -12,7 +12,7 @@
             </panel-list>
         </panel>
 
-        <panel title="'Players'" ng-if="game">
+        <panel heading="'Players'" ng-if="game">
             <panel-list>
                 <a ng-repeat="subgame in game.subgames | orderBy: 'score()'" class="list-group-item">
                     <div>
@@ -30,7 +30,7 @@
             </panel-list>
         </panel>
 
-        <panel title="'Accumulated score'" ng-if="game">
+        <panel heading="'Accumulated score'" ng-if="game">
             <panel-body>
                 <linechart data="chart.acc" style="height: 200px;" />
             </panel-body>

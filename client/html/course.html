@@ -1,7 +1,7 @@
 <h1 ng-bind="course.name"></h1>
 <div class="row">
     <div class="col-md-4">
-        <panel title="'Course info'">
+        <panel heading="'Course info'">
             <panel-list>
                 <a ng-show="course" class="list-group-item"><strong ng-bind="'Name'" /><span ng-bind="course.name" class="pull-right" /></a>
                 <a ng-show="course" class="list-group-item"><strong ng-bind="'City'" /><span ng-bind="course.city" class="pull-right" /></a>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="col-md-4">
-        <panel title="'Holes'">
+        <panel heading="'Holes'">
             <panel-list>
                 <a ng-repeat="hole in course.holes" class="list-group-item">
                     <strong ng-bind="$index + 1" class="col-md-2" />

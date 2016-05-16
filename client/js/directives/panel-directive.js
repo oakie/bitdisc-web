@@ -11,7 +11,7 @@ var directive = function() {
       table: '?panelTable'
     },
     scope: {
-      title: '='
+      heading: '='
     },
     link: function($scope, $elem, $attr, $ctrl, $transclude) {
       $scope.contains = {

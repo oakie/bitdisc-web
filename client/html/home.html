@@ -1,7 +1,7 @@
 <h1>bitdisc</h1>
 <div class="row">
     <div class="col-md-4">
-        <panel title="'Users'">
+        <panel heading="'Users'">
             <panel-list>
                 <a ng-repeat="user in users" class="list-group-item">
                     <user object="user" />
@@ -12,7 +12,7 @@
     </div>
 
     <div class="col-md-4">
-        <panel title="'Courses'">
+        <panel heading="'Courses'">
             <panel-list>
                 <a ng-repeat="course in courses" class="list-group-item" href="#/course/{{course.id}}">
                     <course object="course" />
