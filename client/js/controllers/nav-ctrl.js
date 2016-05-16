@@ -1,11 +1,9 @@
 'use strict';
 
 var ctrl = function($scope, $location, AuthService) {
-  var onAuth = function(auth) {
+  AuthService.onAuth(function(auth) {
     $scope.auth = auth;
-  };
-  AuthService.onauth(onAuth);
-  AuthService.get().then(onAuth);
+  });
 
   $scope.init = function() {};
 

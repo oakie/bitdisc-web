@@ -4,31 +4,21 @@ var Firebase = require('firebase');
 
 var service = function(config, $q) {
   var ref = new Firebase(config.firebase.url);
-  var listeners = [];
-  var defer;
+  var defer = $q.defer(); // will never resolve or reject, only notify on state change
+  var auth = null;
 
-  ref.onAuth(function(auth) {
-    console.log('auth service onauth', auth);
-    if(defer && auth) {
-      defer.resolve(auth);
-    }
-    for(var i = 0; i < listeners.length; ++i) {
-      if(listeners[i]) {
-        listeners[i](auth);
-      }
-    }
+  ref.onAuth(function(token) {
+    console.log('auth service onauth', token);
+    auth = token;
+    defer.notify(auth);
   });
 
-  var get = function() {
-    if(defer) {
-      return defer.promise;
-    }
-    defer = $q.defer();
-    var auth = ref.getAuth();
-    if(auth) {
-      defer.resolve(auth);
-    }
-    return defer.promise;
+  var authenticate = function() {
+    var d = $q.defer();
+    onAuth(function(a) {
+      if(a) { d.resolve(a); }
+    });
+    return d.promise;
   };
 
   var signin = function () {
@@ -40,22 +30,22 @@ var service = function(config, $q) {
         }, { scope: 'email' });
       }
     }, { scope: 'email' });
-
   };
 
   var signout = function() {
     ref.unauth();
   };
 
-  var onauth = function(callback) {
-    listeners.push(callback);
+  var onAuth = function(callback) {
+    defer.promise.then(null, null, callback);
+    defer.notify(auth);
   };
 
   return {
-    get: get,
+    authenticate: authenticate,
     signin: signin,
     signout: signout,
-    onauth: onauth
+    onAuth: onAuth
   };
 };
 service.$inject = ['Config', '$q'];

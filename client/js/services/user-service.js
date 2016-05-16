@@ -17,7 +17,7 @@ var service = function(config, $q, AuthService) {
 
   var list = function() {
     var defer = $q.defer();
-    AuthService.get().then(function(auth) {
+    AuthService.authenticate().then(function(auth) {
       ref.child('user').once('value').then(function(snapshot) {
         var users = snapshot.val();
         for(var i = 0; i < users.length; ++i) {
@@ -31,7 +31,7 @@ var service = function(config, $q, AuthService) {
 
   var get = function(id) {
     var defer = $q.defer();
-    AuthService.get().then(function(auth) {
+    AuthService.authenticate().then(function(auth) {
       ref.child('user').child(id).once('value').then(function (snapshot) {
         var user = snapshot.val();
         user.tag = getUserTag(user);

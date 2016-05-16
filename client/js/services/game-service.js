@@ -63,7 +63,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
   var createSubgame = function(user, course) {
     var defer = $q.defer();
-    AuthService.get().then(function(auth) {
+    AuthService.authenticate().then(function(auth) {
       var subgame = ref.child('subgame').push();
       subgame.set({
         id: subgame.key(),
@@ -80,7 +80,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
   var list = function() {
     var defer = $q.defer();
-    AuthService.get().then(function(auth) {
+    AuthService.authenticate().then(function(auth) {
       ref.child('game').once('value').then(function(snapshot) {
         defer.resolve(snapshot.val());
       });
@@ -90,7 +90,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
   var get = function(id) {
     var defer = $q.defer();
-    AuthService.get().then(function(auth) {
+    AuthService.authenticate().then(function(auth) {
       getGame(id).then(function(game) {
         populateGame(game).then(function(game) {
           defer.resolve(game);
@@ -102,7 +102,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
   var create = function(setup) {
     var defer = $q.defer();
-    AuthService.get().then(function(auth) {
+    AuthService.authenticate().then(function(auth) {
       var promises = [];
       for(var i = 0; i < setup.players.length; ++i) {
         promises.push(createSubgame(setup.players[i], setup.course));
@@ -133,9 +133,20 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
   var updateSplit = function(subgame, index) {
     var defer = $q.defer();
-    AuthService.get().then(function(auth) {
+    AuthService.authenticate().then(function(auth) {
       ref.child('subgame').child(subgame.id).child('splits').child(index).set(subgame.splits[index]);
-      defer.resolve(null);
+      defer.resolve();
+    });
+    return defer.promise;
+  };
+
+  var finish = function(game) {
+    var defer = $q.defer();
+    AuthService.authenticate().then(function(auth) {
+      ref.child('game').child(game.id).child('end').set(Firebase.ServerValue.TIMESTAMP);
+      ref.child('game').child(game.id).on('value', function(snapshot) {
+        defer.resolve(snapshot.val());
+      });
     });
     return defer.promise;
   };
@@ -144,7 +155,8 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
     list: list,
     get: get,
     create: create,
-    updateSplit: updateSplit
+    updateSplit: updateSplit,
+    finish: finish
   };
 };
 service.$inject = ['Config', '$q', 'AuthService', 'CourseService', 'UserService'];

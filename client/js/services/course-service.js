@@ -46,7 +46,7 @@ var service = function(config, $q, AuthService) {
 
   var list = function() {
     var defer = $q.defer();
-    AuthService.get().then(function(auth) {
+    AuthService.authenticate().then(function(auth) {
       ref.child('course').once('value').then(function (snapshot) {
         defer.resolve(snapshot.val());
       });
@@ -56,7 +56,7 @@ var service = function(config, $q, AuthService) {
 
   var get = function(id) {
     var defer = $q.defer();
-    AuthService.get().then(function(auth) {
+    AuthService.authenticate().then(function(auth) {
       getCourse(id).then(function(course) {
         populateCourse(course).then(function(course) {
           defer.resolve(course);
