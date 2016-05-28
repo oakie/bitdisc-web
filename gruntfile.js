@@ -49,7 +49,7 @@ module.exports = function (grunt) {
   grunt.config.set('concat_css', {
     options: {},
     all: {
-      src: ['node_modules/bootstrap/dist/css/bootstrap.css', 'client/css/**/*.css'],
+      src: ['node_modules/bootstrap/dist/css/bootstrap.css', 'node_modules/font-awesome/css/font-awesome.css', 'client/css/**/*.css'],
       dest: 'public/css/bundle.css'
     }
   });
@@ -73,6 +73,11 @@ module.exports = function (grunt) {
         expand: true,
         cwd: 'node_modules/bootstrap/dist',
         src: ['fonts/**'],
+        dest: 'public/'
+      }, {
+        expand: true,
+        cwd: 'node_modules/font-awesome',
+        src: ['fonts/*'],
         dest: 'public/'
       }]
     }

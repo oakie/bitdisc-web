@@ -1,16 +1,15 @@
 'use strict';
 
-var Firebase = require('firebase');
-
 var service = function(config, $q) {
-  var ref = new Firebase(config.firebase.url);
+  var provider = new firebase.auth.GoogleAuthProvider();
+  var auth = firebase.auth();
   var defer = $q.defer(); // will never resolve or reject, only notify on state change
-  var auth = null;
+  var token = null;
 
-  ref.onAuth(function(token) {
-    console.log('auth service onauth', token);
-    auth = token;
-    defer.notify(auth);
+  auth.onAuthStateChanged(function(user) {
+    console.log('auth service state changed', user);
+    token = user;
+    defer.notify(token);
   });
 
   var authenticate = function() {
@@ -21,24 +20,23 @@ var service = function(config, $q) {
     return d.promise;
   };
 
-  var signin = function () {
-    ref.authWithOAuthPopup("google", function(error, auth) {
+  var signin = function() {
+    auth.signInWithPopup(provider).then(null, function(error) {
       if(error && error.code === 'TRANSPORT_UNAVAILABLE') {
-        ref.authWithOAuthRedirect("google", function(error, auth) {
+        auth.signInWithRedirect(provider).then(null, function(error) {
           console.log('error: ' + error);
-          console.log('auth: ' + auth);
-        }, { scope: 'email' });
+        });
       }
-    }, { scope: 'email' });
+    });
   };
 
   var signout = function() {
-    ref.unauth();
+    auth.signOut();
   };
 
   var onAuth = function(callback) {
     defer.promise.then(null, null, callback);
-    defer.notify(auth);
+    defer.notify(token);
   };
 
   return {

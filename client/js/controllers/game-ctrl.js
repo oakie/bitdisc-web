@@ -1,7 +1,7 @@
 'use strict';
 var Chart = require('chart.js');
 
-var ctrl = function($scope, $routeParams, UserService, CourseService, GameService) {
+var ctrl = function($scope, $routeParams, UserService, CourseService, GameService, ModalService) {
   $scope.game = null;
   $scope.params = $routeParams;
   $scope.chart = {};
@@ -45,8 +45,17 @@ var ctrl = function($scope, $routeParams, UserService, CourseService, GameServic
 
     $scope.chart.acc = acc;
   };
+
+  $scope.openGameOptionsModal = function() {
+    ModalService.open({id: 'game-options', game: $scope.game});
+  };
+
+  $scope.$on('game-update', function(game) {
+    if(game.id !== $scope.params.id) { return; }
+    $scope.game = game;
+  });
   
   $scope.init();
 };
-ctrl.$inject = ['$scope', '$routeParams', 'UserService', 'CourseService', 'GameService'];
+ctrl.$inject = ['$scope', '$routeParams', 'UserService', 'CourseService', 'GameService', 'ModalService'];
 module.exports = ctrl;

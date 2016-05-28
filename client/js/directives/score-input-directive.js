@@ -8,7 +8,6 @@ var directive = function($q, ModalService, GameService) {
     link: function($scope, $elem, $attr) {
       ModalService.register('score-input', $scope);
       angular.element($elem.children()[0]).on('hidden.bs.modal', function () {
-
         var promises = [];
         for(var i = 0; i < $scope.game.subgames.length; ++i) {
           promises.push(GameService.updateSplit($scope.game.subgames[i], $scope.index));
@@ -33,7 +32,7 @@ var directive = function($q, ModalService, GameService) {
       });
 
       $scope.incScore = function(subgame) {
-        if(subgame.splits[$scope.index] === 0) {
+        if(subgame.splits[$scope.index] === 0 && $scope.par !== 0) {
           subgame.splits[$scope.index] = $scope.par;
         } else {
           subgame.splits[$scope.index] += 1;

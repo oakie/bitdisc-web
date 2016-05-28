@@ -2,7 +2,12 @@
 
 <div class="row">
     <div class="col-md-6">
-        <panel heading="'Game info'" ng-if="game">
+        <panel ng-if="game">
+            <panel-head>
+                <span class="h4">Game info</span>
+                <a class="pull-right text-white" ng-click="openGameOptionsModal()"><glyph name="option-vertical" /></a>
+                <span class="clearfix" />
+            </panel-head>
             <panel-list>
                 <a ng-show="game" href="#/course/{{ game.course.id }}" class="list-group-item"><strong ng-bind="'Course'" /><span ng-bind="game.course.name" class="pull-right" /></a>
                 <a ng-show="game" class="list-group-item"><strong ng-bind="'Updated'" /><span ng-bind="game.timestamp | date:'yyyy-MM-dd HH:mm:ss'" class="pull-right" /></a>

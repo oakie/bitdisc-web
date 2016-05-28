@@ -4,7 +4,7 @@
         <panel heading="'Users'">
             <panel-list>
                 <a ng-repeat="user in users" class="list-group-item">
-                    <user object="user" />
+                    <user object="user"></user>
                 </a>
                 <li ng-show="!users" ng-bind="'No users'" class="list-group-item" />
             </panel-list>
@@ -15,7 +15,7 @@
         <panel heading="'Courses'">
             <panel-list>
                 <a ng-repeat="course in courses" class="list-group-item" href="#/course/{{course.id}}">
-                    <course object="course" />
+                    <course object="course"></course>
                 </a>
                 <li ng-show="!users" ng-bind="'No courses'" class="list-group-item" />
             </panel-list>
@@ -25,13 +25,14 @@
     <div class="col-md-4">
         <panel>
             <panel-head>
-                <span class="h4">Games</span>
+                <span class="h4"><a href="#/games" style="color: white;">Latest games</a></span>
                 <a class="pull-right text-white" ng-click="openGameSetupModal()"><glyph name="plus" /></a>
                 <span class="clearfix" />
             </panel-head>
             <panel-list>
-                <a ng-repeat="game in games | orderBy: '-start'" class="list-group-item" href="#/game/{{game.id}}">
-                    <game object="game" />
+                <a ng-repeat="game in games | orderBy: '-start' | limitTo: 10" class="list-group-item" href="#/game/{{game.id}}">
+                    <span class="badge" style="margin-left: 10px;" ng-bind="game.subgames.length"></span>
+                    <game object="game"></game>
                 </a>
                 <li ng-show="!games" ng-bind="'No games'" class="list-group-item" />
             </panel-list>

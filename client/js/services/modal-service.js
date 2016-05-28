@@ -1,7 +1,7 @@
 'use strict';
 
 var service = function(config, $q) {
-  var modalScopes = {};
+  var modals = {};
 
   var open = function(context) {
     close(); // hide any already opened modals
@@ -9,27 +9,30 @@ var service = function(config, $q) {
     var defer = $q.defer();
     context.defer = defer;
 
-    if(!modalScopes[context.id]) {
+    if(!modals[context.id]) {
       console.log('unregistered modal scope: ' + context.id);
       return null;
     }
 
-    modalScopes[context.id].context = context;
+    modals[context.id].scope.context = context;
     defer.promise.then(function () {
-      modalScopes[context.id].context = null;
+      modals[context.id].scope.context = null;
     });
-
-    $('#' + context.id + '-modal .modal').modal('show');
+    modals[context.id].elem.modal('show');
 
     return defer.promise;
   };
 
   var register = function (name, scope) {
-    modalScopes[name] = scope;
+    modals[name] = {scope: scope, elem: $('#' + name + '-modal .modal')};
   };
 
   var close = function() {
-    $('.modal').modal('hide');
+    for (var key in modals) {
+      if (modals.hasOwnProperty(key)) {
+        modals[key].elem.modal('hide');
+      }
+    }
   };
 
   return {

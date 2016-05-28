@@ -2,15 +2,19 @@
 
 window.$ = window.jQuery = require('jquery');
 require('bootstrap');
+var config = require('../../config.js');
 var angular = require('angular');
 require('angular-route');
+
+require('firebase');
+firebase.initializeApp(config.firebase);
 
 var app = angular.module('app', ['ngRoute', 'templates-bitdisc', 'filters']);
 var filters = angular.module('filters', []);
 
 /* Configuration */
 app.constant('VERSION', require('../../package.json').version);
-app.constant('Config', require('../../config.js'));
+app.constant('Config', config);
 
 /* Routes */
 app.config(function($routeProvider) {
@@ -46,6 +50,7 @@ app.directive('hole', require('./directives/hole-directive'));
 app.directive('scorecard', require('./directives/scorecard-directive'));
 app.directive('scoreinput', require('./directives/score-input-directive'));
 app.directive('gamesetup', require('./directives/game-setup-directive'));
+app.directive('gameoptions', require('./directives/game-options-directive'));
 app.directive('panel', require('./directives/panel-directive'));
 app.directive('linechart', require('./directives/linechart-directive'));
 app.directive('glyph', require('./directives/glyphicon-directive'));

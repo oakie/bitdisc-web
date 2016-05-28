@@ -1,9 +1,7 @@
 'use strict';
 
-var Firebase = require('firebase');
-
 var service = function(config, $q, AuthService, CourseService, UserService) {
-  var ref = new Firebase(config.firebase.url);
+  var ref = firebase.database().ref();
 
   var getGame = function(id) {
     var defer = $q.defer();
@@ -66,10 +64,10 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
     AuthService.authenticate().then(function(auth) {
       var subgame = ref.child('subgame').push();
       subgame.set({
-        id: subgame.key(),
+        id: subgame.key,
         user: user.id,
         splits: new Array(course.holes.length + 1).join('0').split('').map(parseFloat),
-        timestamp: Firebase.ServerValue.TIMESTAMP
+        timestamp: firebase.database.ServerValue.TIMESTAMP
       });
       subgame.on('value', function(snapshot) {
         defer.resolve(snapshot.val());
@@ -92,9 +90,13 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
     var defer = $q.defer();
     AuthService.authenticate().then(function(auth) {
       getGame(id).then(function(game) {
-        populateGame(game).then(function(game) {
-          defer.resolve(game);
-        });
+        if(game) {
+          populateGame(game).then(function(game) {
+            defer.resolve(game);
+          });
+        } else {
+          defer.reject();
+        }
       });
     });
     return defer.promise;
@@ -116,11 +118,11 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
         }
 
         game.set({
-          id: game.key(),
+          id: game.key,
           course: setup.course.id,
           subgames: subs,
-          start: Firebase.ServerValue.TIMESTAMP,
-          timestamp: Firebase.ServerValue.TIMESTAMP
+          start: firebase.database.ServerValue.TIMESTAMP,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
         });
 
         game.on('value', function(snapshot) {
@@ -143,10 +145,32 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
   var finish = function(game) {
     var defer = $q.defer();
     AuthService.authenticate().then(function(auth) {
-      ref.child('game').child(game.id).child('end').set(Firebase.ServerValue.TIMESTAMP);
-      ref.child('game').child(game.id).on('value', function(snapshot) {
-        defer.resolve(snapshot.val());
+      ref.child('game').child(game.id).child('end').set(firebase.database.ServerValue.TIMESTAMP);
+      get(game.id).then(function(game) {
+        defer.resolve(game);
       });
+    });
+    return defer.promise;
+  };
+
+  var removeSubgame = function(subgame) {
+    var defer = $q.defer();
+    AuthService.authenticate().then(function(auth) {
+      ref.child('subgame').child(subgame.id).remove();
+      defer.resolve();
+    });
+    return defer.promise;
+  };
+  
+  var remove = function(game) {
+    var defer = $q.defer();
+    var promises = [];
+    for(var i = 0; i < game.subgames.length; ++i) {
+      promises.push(removeSubgame(game.subgames[i]));
+    }
+    $q.all(promises).then(function() {
+      ref.child('game').child(game.id).remove();
+      defer.resolve();
     });
     return defer.promise;
   };
@@ -155,6 +179,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
     list: list,
     get: get,
     create: create,
+    remove: remove,
     updateSplit: updateSplit,
     finish: finish
   };

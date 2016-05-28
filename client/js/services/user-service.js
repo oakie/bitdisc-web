@@ -1,9 +1,7 @@
 'use strict';
 
-var Firebase = require('firebase');
-
 var service = function(config, $q, AuthService) {
-  var ref = new Firebase(config.firebase.url);
+  var ref = firebase.database().ref();
 
   var getUserTag = function(user) {
     if(user.name.indexOf(' ') === -1) {

@@ -1,5 +1,4 @@
 <div>
-    <strong ng-bind="game.subgames.length + ' player(s)'" /> @
     <strong ng-show="game.course.id" ng-bind="game.course.name" />
     <span ng-show="!game.course.id" ng-bind="'Loading course'" />
     <span ng-bind="game.start | date:'yyyy-MM-dd'" class="pull-right" />
