@@ -39,9 +39,42 @@ var service = function(config, $q, AuthService) {
     return defer.promise;
   };
 
+  var update = function(auth) {
+    if(!auth) { return; }
+    var data = auth.providerData[0];
+    ref.child('user').orderByChild('email').equalTo(data.email).once('value', function(snap) {
+      if(!snap.val()) {
+        var newUser = ref.child('user').push();
+        newUser.set({
+          id: newUser.key,
+          email: data.email,
+          name: data.displayName,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+    }, function(error) {
+      console.log('error', error);
+    });
+  };
+
+  var me = function() {
+    var defer = $q.defer();
+    ref.child('user').orderByChild('email').equalTo(data.email).once('value', function(snap) {
+      defer.resolve(snap.val());
+    });
+    return defer.promise;
+  };
+
+  AuthService.onAuth('user-service', function(auth) {
+    console.log('user service onauth', auth);
+    update(auth);
+  });
+
   return {
     list: list,
-    get: get
+    get: get,
+    update: update,
+    me: me
   };
 };
 service.$inject = ['Config', '$q', 'AuthService'];

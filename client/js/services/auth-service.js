@@ -2,21 +2,36 @@
 
 var service = function(config, $q) {
   var provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('email');
   var auth = firebase.auth();
-  var defer = $q.defer(); // will never resolve or reject, only notify on state change
   var token = null;
+  var authStateListeners = {};
+  var queue = [];
 
   auth.onAuthStateChanged(function(user) {
     console.log('auth service state changed', user);
     token = user;
-    defer.notify(token);
+
+    for(var key in authStateListeners) {
+      if(authStateListeners.hasOwnProperty(key)) {
+        authStateListeners[key](token);
+      }
+    }
+    if(token) {
+      for(var i = 0; i < queue.length; ++i) {
+        queue[i].resolve(token);
+      }
+      queue = [];
+    }
   });
 
   var authenticate = function() {
     var d = $q.defer();
-    onAuth(function(a) {
-      if(a) { d.resolve(a); }
-    });
+    if(token) {
+      d.resolve(token);
+    } else {
+      queue.push(d);
+    }
     return d.promise;
   };
 
@@ -34,9 +49,9 @@ var service = function(config, $q) {
     auth.signOut();
   };
 
-  var onAuth = function(callback) {
-    defer.promise.then(null, null, callback);
-    defer.notify(token);
+  var onAuth = function(id, callback) {
+    authStateListeners[id] = callback;
+    callback(token);
   };
 
   return {
