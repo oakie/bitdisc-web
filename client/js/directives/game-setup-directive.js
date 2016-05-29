@@ -1,6 +1,6 @@
 'use strict';
 
-var directive = function($location, ModalService, CourseService, UserService, GameService) {
+var directive = function($location, UtilService, ModalService, CourseService, UserService, GameService) {
   return {
     restrict: 'E',
     templateUrl: 'game-setup-directive.html',
@@ -20,10 +20,10 @@ var directive = function($location, ModalService, CourseService, UserService, Ga
           players: []
         };
         CourseService.list().then(function(courses) {
-          $scope.courses = listify(courses);
+          $scope.courses = UtilService.listify(courses);
         });
         UserService.list().then(function (users) {
-          $scope.users = listify(users);
+          $scope.users = UtilService.listify(users);
         });
       };
 
@@ -53,17 +53,9 @@ var directive = function($location, ModalService, CourseService, UserService, Ga
         }
       };
 
-      var listify = function(items) {
-        var list = [];
-        $.each(items, function(key, value) {
-          list.push(value);
-        });
-        return list;
-      };
-
       $scope.init();
     }
   };
 };
-directive.$inject = ['$location', 'ModalService', 'CourseService', 'UserService', 'GameService'];
+directive.$inject = ['$location', 'UtilService', 'ModalService', 'CourseService', 'UserService', 'GameService'];
 module.exports = directive;

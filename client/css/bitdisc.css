@@ -18,6 +18,22 @@ a {
     vertical-align: middle;
 }
 
-.modal-content .table {
+.modal {
+    position: absolute;
+    overflow-y: scroll;
+}
+
+.modal-content.table {
     margin-bottom: 0;
+}
+
+.thumbnail.tall {
+    color: #9d9d9d;
+    text-decoration: none;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.thumbnail.tall:hover {
+    color: #337ab7;
 }

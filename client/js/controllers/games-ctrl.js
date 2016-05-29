@@ -1,13 +1,7 @@
 'use strict';
 
-var ctrl = function($scope, UtilService, UserService, CourseService, GameService, ModalService) {
+var ctrl = function($scope, UtilService, ModalService, GameService) {
   $scope.init = function() {
-    UserService.list().then(function(items) {
-      $scope.users = UtilService.listify(items);
-    });
-    CourseService.list().then(function(items) {
-      $scope.courses = UtilService.listify(items);
-    });
     GameService.list().then(function(items) {
       $scope.games = UtilService.listify(items);
     });
@@ -23,5 +17,5 @@ var ctrl = function($scope, UtilService, UserService, CourseService, GameService
 
   $scope.init();
 };
-ctrl.$inject = ['$scope', 'UtilService', 'UserService', 'CourseService', 'GameService', 'ModalService'];
+ctrl.$inject = ['$scope', 'UtilService', 'ModalService', 'GameService'];
 module.exports = ctrl;

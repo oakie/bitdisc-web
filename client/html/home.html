@@ -1,4 +1,32 @@
-<h1>bitdisc</h1>
+<div class="row hidden-xs">
+    <div class="col-sm-4">
+        <a class="thumbnail tall text-center" ng-click="openGameSetupModal()">
+            <span class="h3"><glyph name="plus"></glyph> NEW GAME</span>
+        </a>
+    </div>
+    <div class="col-sm-4">
+        <a class="thumbnail tall text-center">
+            <span class="h3"><glyph name="plus"></glyph> NEW PLAYER</span>
+        </a>
+    </div>
+    <div class="col-sm-4">
+        <a class="thumbnail tall text-center">
+            <span class="h3"><glyph name="plus"></glyph> NEW COURSE</span>
+        </a>
+    </div>
+</div>
+<div class="row visible-xs-block">
+    <div class="col-xs-4">
+        <a class="btn btn-primary btn-block" ng-click="openGameSetupModal()"><glyph name="plus"></glyph> <glyph name="tower"></glyph></a>
+    </div>
+    <div class="col-xs-4">
+        <a class="btn btn-primary btn-block"><glyph name="plus"></glyph> <glyph name="user"></glyph></a>
+    </div>
+    <div class="col-xs-4">
+        <a class="btn btn-primary btn-block"><glyph name="plus"></glyph> <glyph name="flag"></glyph></a>
+    </div>
+</div>
+<br />
 <div class="row">
     <div class="col-md-4">
         <panel heading="'Users'">
@@ -17,7 +45,7 @@
                 <a ng-repeat="course in courses" class="list-group-item" href="#/course/{{course.id}}">
                     <course object="course"></course>
                 </a>
-                <li ng-show="!users" ng-bind="'No courses'" class="list-group-item" />
+                <li ng-show="!courses" ng-bind="'No courses'" class="list-group-item" />
             </panel-list>
         </panel>
     </div>

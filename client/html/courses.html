@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <panel heading="'Courses'">
+            <panel-list>
+                <a ng-repeat="course in courses" class="list-group-item" href="#/course/{{course.id}}">
+                    <course object="course"></course>
+                </a>
+                <li ng-show="!courses" ng-bind="'No courses'" class="list-group-item" />
+            </panel-list>
+        </panel>
+    </div>
+</div>

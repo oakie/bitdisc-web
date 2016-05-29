@@ -22,13 +22,25 @@ app.config(function($routeProvider) {
     templateUrl: 'home.html',
     controller: 'HomeCtrl'
   })
+  .when('/games', {
+    templateUrl: 'games.html',
+    controller: 'GamesCtrl'
+  })
   .when('/game/:id', {
     templateUrl: 'game.html',
     controller: 'GameCtrl'
   })
+  .when('/courses', {
+    templateUrl: 'courses.html',
+    controller: 'CoursesCtrl'
+  })
   .when('/course/:id', {
     templateUrl: 'course.html',
     controller: 'CourseCtrl'
+  })
+  .when('/users', {
+    templateUrl: 'users.html',
+    controller: 'UsersCtrl'
   })
   .otherwise({
     redirectTo: '/'
@@ -37,6 +49,7 @@ app.config(function($routeProvider) {
 
 /* Services */
 app.factory('AuthService', require('./services/auth-service'));
+app.factory('UtilService', require('./services/util-service'));
 app.factory('UserService', require('./services/user-service'));
 app.factory('CourseService', require('./services/course-service'));
 app.factory('GameService', require('./services/game-service'));
@@ -57,11 +70,13 @@ app.directive('glyph', require('./directives/glyphicon-directive'));
 
 /* Controllers */
 app.controller('NavCtrl', require('./controllers/nav-ctrl'));
-//app.controller('SigninCtrl', require('./controllers/signin-ctrl'));
 app.controller('ModalCtrl', require('./controllers/modal-ctrl'));
 app.controller('HomeCtrl', require('./controllers/home-ctrl'));
+app.controller('GamesCtrl', require('./controllers/games-ctrl'));
 app.controller('GameCtrl', require('./controllers/game-ctrl'));
+app.controller('CoursesCtrl', require('./controllers/courses-ctrl'));
 app.controller('CourseCtrl', require('./controllers/course-ctrl'));
+app.controller('UsersCtrl', require('./controllers/users-ctrl'));
 
 /* Filters */
 filters.filter('getat', require('./filters/getat-filter'));
