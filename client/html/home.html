@@ -5,7 +5,7 @@
         </a>
     </div>
     <div class="col-sm-4">
-        <a class="thumbnail tall text-center">
+        <a class="thumbnail tall text-center" ng-click="openGuestSetupModal()">
             <span class="h3"><glyph name="plus"></glyph> NEW PLAYER</span>
         </a>
     </div>
@@ -15,26 +15,29 @@
         </a>
     </div>
 </div>
+
 <div class="row visible-xs-block">
     <div class="col-xs-4">
         <a class="btn btn-primary btn-block" ng-click="openGameSetupModal()"><glyph name="plus"></glyph> <glyph name="tower"></glyph></a>
     </div>
     <div class="col-xs-4">
-        <a class="btn btn-primary btn-block"><glyph name="plus"></glyph> <glyph name="user"></glyph></a>
+        <a class="btn btn-primary btn-block" ng-click="openGuestSetupModal()"><glyph name="plus"></glyph> <glyph name="user"></glyph></a>
     </div>
     <div class="col-xs-4">
         <a class="btn btn-primary btn-block"><glyph name="plus"></glyph> <glyph name="flag"></glyph></a>
     </div>
 </div>
+
 <br />
+
 <div class="row">
     <div class="col-md-4">
-        <panel heading="'Users'">
+        <panel ng-show="me" heading="me.name + '\'s friends'">
             <panel-list>
-                <a ng-repeat="user in users" class="list-group-item">
-                    <user object="user"></user>
+                <a ng-repeat="friend in friends | orderBy: 'name'" class="list-group-item">
+                    <user object="friend"></user>
                 </a>
-                <li ng-show="!users" ng-bind="'No users'" class="list-group-item" />
+                <li ng-show="!friends" ng-bind="'No friends'" class="list-group-item" />
             </panel-list>
         </panel>
     </div>

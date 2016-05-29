@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" ng-click="cancel()">&times;</button>
                 <h4 class="modal-title">Game setup</h4>
             </div>
             <div class="modal-body">
@@ -29,11 +29,12 @@
                         <select class="form-control" id="playerSelect" ng-model="selectedPlayer" ng-options="user.name for user in users | orderBy: 'name' track by user.id" ng-change="addPlayer(selectedPlayer)">
                             <option value="">Add a player</option>
                         </select>
+                        <a class="btn btn-default form-control" ng-click="addGuest()">Create a guest player</a>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
                 <button type="button" class="btn btn-primary" ng-click="proceed()">Start game</button>
             </div>
         </div>

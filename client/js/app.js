@@ -63,6 +63,7 @@ app.directive('hole', require('./directives/hole-directive'));
 app.directive('scorecard', require('./directives/scorecard-directive'));
 app.directive('scoreinput', require('./directives/score-input-directive'));
 app.directive('gamesetup', require('./directives/game-setup-directive'));
+app.directive('guestsetup', require('./directives/guest-setup-directive'));
 app.directive('gameoptions', require('./directives/game-options-directive'));
 app.directive('panel', require('./directives/panel-directive'));
 app.directive('linechart', require('./directives/linechart-directive'));

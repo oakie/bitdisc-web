@@ -1,7 +1,16 @@
 'use strict';
 
 var ctrl = function($scope, UtilService, UserService, CourseService, GameService, ModalService) {
+  $scope.me = null;
+
   $scope.init = function() {
+    UserService.me().then(function(user) {
+      console.log('me: ', user);
+      $scope.me = user;
+      UserService.getFriends(user).then(function(friends) {
+        $scope.friends = friends;
+      });
+    });
     UserService.list().then(function(items) {
       $scope.users = UtilService.listify(items);
     });
@@ -16,8 +25,19 @@ var ctrl = function($scope, UtilService, UserService, CourseService, GameService
   $scope.openGameSetupModal = function() {
     var context = {id: 'game-setup', data: {}};
     var gameSetupPromise = ModalService.open(context);
-    gameSetupPromise.then(function (val) {
+    gameSetupPromise.then(function(val) {
       console.log(val);
+    });
+  };
+
+  $scope.openGuestSetupModal = function() {
+    var context = {id: 'guest-setup', data: {}};
+    var guestSetupPromise = ModalService.open(context);
+    guestSetupPromise.then(function(val) {
+      console.log(val);
+      if(val) {
+        $scope.friends.push(val);
+      }
     });
   };
 

@@ -7,13 +7,9 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
     scope: true,
     link: function($scope, $elem, $attr) {
       ModalService.register('game-setup', $scope);
-      angular.element($elem.children()[0]).on('hidden.bs.modal', function () {
-        $scope.defer.resolve('closed game setup');
-      });
 
       $scope.init = function() {
         if(!$scope.context) { return; }
-        $scope.defer = $scope.context.defer;
         $scope.selectedPlayer = null;
         $scope.setup = {
           course: null,
@@ -37,6 +33,10 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
           ModalService.close();
         });
       };
+      
+      $scope.cancel = function() {
+        ModalService.close();
+      };
 
       $scope.addPlayer = function(user) {
         if($scope.setup.players.indexOf(user) > -1) {
@@ -51,6 +51,13 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
         if(index > -1) {
           $scope.setup.players.splice(index, 1);
         }
+      };
+
+      $scope.addGuest = function() {
+        var context = {id: 'guest-setup', data: {}};
+        ModalService.open(context).then(function(guest) {
+          console.log('game setup new guest: ', guest);
+        });
       };
 
       $scope.init();

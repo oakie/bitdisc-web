@@ -1,6 +1,6 @@
 'use strict';
 
-var service = function(config, $q, AuthService) {
+var service = function(config, $q, UtilService, AuthService) {
   var ref = firebase.database().ref();
 
   var getUserTag = function(user) {
@@ -27,13 +27,38 @@ var service = function(config, $q, AuthService) {
     return defer.promise;
   };
 
+  var getFriends = function(user) {
+    var defer = $q.defer();
+    var promises = [];
+
+    if(user.friends) {
+      user.friends = UtilService.listify(user.friends);
+      for(var i = 0; i < user.friends.length; ++i) {
+        promises.push(get(user.friends[i]));
+      }
+    }
+
+    $q.all(promises).then(function(items) {
+      defer.resolve(items);
+    });
+
+    return defer.promise;
+  };
+
+  var populateUser = function(user) {
+    var defer = $q.defer();
+    user.tag = getUserTag(user);
+    defer.resolve(user);
+    return defer.promise;
+  };
+
   var get = function(id) {
     var defer = $q.defer();
     AuthService.authenticate().then(function(auth) {
       ref.child('user').child(id).once('value').then(function (snapshot) {
-        var user = snapshot.val();
-        user.tag = getUserTag(user);
-        defer.resolve(user);
+        populateUser(snapshot.val()).then(function(user) {
+          defer.resolve(user);
+        });
       });
     });
     return defer.promise;
@@ -59,14 +84,31 @@ var service = function(config, $q, AuthService) {
 
   var me = function() {
     var defer = $q.defer();
-    ref.child('user').orderByChild('email').equalTo(data.email).once('value', function(snap) {
-      defer.resolve(snap.val());
+    AuthService.authenticate().then(function(auth) {
+      ref.child('auth_map').child(auth.uid).once('value', function(snap) {
+        var id = snap.val();
+        if(id) {
+          get(id).then(function(user) {
+            defer.resolve(user);
+          });
+        } else {
+          console.log('unknown auth user', auth.uid);
+          defer.reject();
+        }
+      });
+    });
+    return defer.promise;
+  };
+
+  var createGuest = function(guest) {
+    var defer = $q.defer();
+    me().then(function(user) {
+      defer.resolve(user);
     });
     return defer.promise;
   };
 
   AuthService.onAuth('user-service', function(auth) {
-    console.log('user service onauth', auth);
     update(auth);
   });
 
@@ -74,8 +116,10 @@ var service = function(config, $q, AuthService) {
     list: list,
     get: get,
     update: update,
-    me: me
+    me: me,
+    getFriends: getFriends,
+    createGuest: createGuest
   };
 };
-service.$inject = ['Config', '$q', 'AuthService'];
+service.$inject = ['Config', '$q', 'UtilService', 'AuthService'];
 module.exports = service;
