@@ -43,7 +43,7 @@ var directive = function($sce) {
 
         $scope.legend = $sce.trustAsHtml(generateLegend($scope.data.datasets));
       };
-      
+
       $scope.$watch('data', function() {
         $scope.init();
       }, true);

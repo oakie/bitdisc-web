@@ -29,6 +29,7 @@
                         <select class="form-control" id="playerSelect" ng-model="selectedPlayer" ng-options="user.name for user in users | orderBy: 'name' track by user.id" ng-change="addPlayer(selectedPlayer)">
                             <option value="">Add a player</option>
                         </select>
+                        <b>... or ...</b>
                         <a class="btn btn-default form-control" ng-click="addGuest()">Create a guest player</a>
                     </div>
                 </form>

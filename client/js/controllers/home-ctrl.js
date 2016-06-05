@@ -24,8 +24,7 @@ var ctrl = function($scope, UtilService, UserService, CourseService, GameService
 
   $scope.openGameSetupModal = function() {
     var context = {id: 'game-setup', data: {}};
-    var gameSetupPromise = ModalService.open(context);
-    gameSetupPromise.then(function(val) {
+    ModalService.open(context).then(function(val) {
       console.log(val);
     });
   };

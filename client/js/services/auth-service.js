@@ -1,8 +1,13 @@
 'use strict';
 
 var service = function(config, $q) {
-  var provider = new firebase.auth.GoogleAuthProvider();
-  provider.addScope('email');
+  var providers = {
+    google: new firebase.auth.GoogleAuthProvider(),
+    facebook: new firebase.auth.FacebookAuthProvider()
+  };
+  providers.google.addScope('email');
+  providers.facebook.addScope('email');
+
   var auth = firebase.auth();
   var token = null;
   var authStateListeners = {};
@@ -35,10 +40,10 @@ var service = function(config, $q) {
     return d.promise;
   };
 
-  var signin = function() {
-    auth.signInWithPopup(provider).then(null, function(error) {
+  var signin = function(provider) {
+    auth.signInWithPopup(providers[provider]).then(null, function(error) {
       if(error && error.code === 'TRANSPORT_UNAVAILABLE') {
-        auth.signInWithRedirect(provider).then(null, function(error) {
+        auth.signInWithRedirect(providers[provider]).then(null, function(error) {
           console.log('error: ' + error);
         });
       }

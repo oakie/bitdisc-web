@@ -5,7 +5,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
   var getGame = function(id) {
     var defer = $q.defer();
-    ref.child('game').child(id).once('value').then(function (snapshot) {
+    ref.child('game').child(id).once('value').then(function(snapshot) {
       defer.resolve(snapshot.val());
     });
     return defer.promise;
@@ -13,7 +13,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
   var getSubgame = function(id) {
     var defer = $q.defer();
-    ref.child('subgame').child(id).once('value').then(function (snapshot) {
+    ref.child('subgame').child(id).once('value').then(function(snapshot) {
       var subgame = snapshot.val();
       subgame.score = function() {
         var s = 0;
@@ -25,7 +25,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
         }
         return s;
       };
-      UserService.get(subgame.user).then(function (user) {
+      UserService.get(subgame.user).then(function(user) {
         subgame.user = user;
         defer.resolve(subgame);
       });
@@ -49,7 +49,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
   var populateGame = function(game) {
     var defer = $q.defer();
     var coursePromise = CourseService.get(game.course);
-    var subgamePromise = getSubgames(game.subgames || []) ;
+    var subgamePromise = getSubgames(game.subgames || []);
 
     $q.all([coursePromise, subgamePromise]).then(function(args) {
       game.course = args[0];
@@ -162,7 +162,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
     });
     return defer.promise;
   };
-  
+
   var remove = function(game) {
     var defer = $q.defer();
     var promises = [];

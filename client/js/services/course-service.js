@@ -5,7 +5,7 @@ var service = function(config, $q, AuthService) {
 
   var getCourse = function(id) {
     var defer = $q.defer();
-    ref.child('course').child(id).once('value').then(function (snapshot) {
+    ref.child('course').child(id).once('value').then(function(snapshot) {
       defer.resolve(snapshot.val());
     });
     return defer.promise;
@@ -13,7 +13,7 @@ var service = function(config, $q, AuthService) {
 
   var getHole = function(id) {
     var defer = $q.defer();
-    ref.child('hole').child(id).once('value').then(function (snapshot) {
+    ref.child('hole').child(id).once('value').then(function(snapshot) {
       defer.resolve(snapshot.val());
     });
     return defer.promise;
@@ -45,7 +45,7 @@ var service = function(config, $q, AuthService) {
   var list = function() {
     var defer = $q.defer();
     AuthService.authenticate().then(function(auth) {
-      ref.child('course').once('value').then(function (snapshot) {
+      ref.child('course').once('value').then(function(snapshot) {
         defer.resolve(snapshot.val());
       });
     });

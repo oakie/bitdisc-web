@@ -8,9 +8,11 @@ var directive = function() {
       course: '=object'
     },
     link: function($scope, $elem, $attr) {
-      $scope.init = function() {};
+      $scope.init = function() {
+      };
 
-      $attr.$observe('object', function() {});
+      $attr.$observe('object', function() {
+      });
 
       $scope.init();
     }

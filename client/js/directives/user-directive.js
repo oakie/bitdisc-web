@@ -13,8 +13,12 @@ var directive = function() {
     },
     link: function($scope, $elem, $attr, $ctrl, $transclude) {
       $scope.contains = {
-        left: function() { return $transclude.isSlotFilled('left'); },
-        right: function() { return $transclude.isSlotFilled('right'); }
+        left: function() {
+          return $transclude.isSlotFilled('left');
+        },
+        right: function() {
+          return $transclude.isSlotFilled('right');
+        }
       };
 
       $scope.init = function() {

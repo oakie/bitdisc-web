@@ -9,7 +9,9 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
       ModalService.register('game-setup', $scope);
 
       $scope.init = function() {
-        if(!$scope.context) { return; }
+        if(!$scope.context) {
+          return;
+        }
         $scope.selectedPlayer = null;
         $scope.setup = {
           course: null,
@@ -18,7 +20,7 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
         CourseService.list().then(function(courses) {
           $scope.courses = UtilService.listify(courses);
         });
-        UserService.list().then(function (users) {
+        UserService.list().then(function(users) {
           $scope.users = UtilService.listify(users);
         });
       };
@@ -33,7 +35,7 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
           ModalService.close();
         });
       };
-      
+
       $scope.cancel = function() {
         ModalService.close();
       };
@@ -56,8 +58,10 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
       $scope.addGuest = function() {
         var context = {id: 'guest-setup', data: {}};
         ModalService.open(context).then(function(guest) {
-          $scope.addPlayer(guest);
           console.log('game setup new guest: ', guest);
+          if(guest) {
+            $scope.addPlayer(guest);
+          }
         });
       };
 

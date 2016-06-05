@@ -9,7 +9,7 @@ var service = function(config, $q, UtilService, AuthService) {
     }
     var firstTriplet = user.name.substring(0, Math.min(3, user.name.indexOf(' ')));
     var x = user.name.lastIndexOf(' ') + 1;
-    var lastTriplet = user.name.substring(x, Math.min(x+3, user.name.length));
+    var lastTriplet = user.name.substring(x, Math.min(x + 3, user.name.length));
     return (firstTriplet + lastTriplet).toUpperCase();
   };
 
@@ -55,7 +55,7 @@ var service = function(config, $q, UtilService, AuthService) {
   var get = function(id) {
     var defer = $q.defer();
     AuthService.authenticate().then(function(auth) {
-      ref.child('user').child(id).once('value').then(function (snapshot) {
+      ref.child('user').child(id).once('value').then(function(snapshot) {
         populateUser(snapshot.val()).then(function(user) {
           defer.resolve(user);
         });
@@ -65,10 +65,17 @@ var service = function(config, $q, UtilService, AuthService) {
   };
 
   var update = function(auth) {
-    if(!auth) { return; }
+    if(!auth) {
+      return;
+    }
     var data = auth.providerData[0];
     ref.child('user').orderByChild('email').equalTo(data.email).once('value', function(snap) {
-      if(!snap.val()) {
+      var user = null;
+      snap.forEach(function(child) {
+        user = child.val();
+      });
+
+      if(!user) {
         var newUser = ref.child('user').push();
         newUser.set({
           id: newUser.key,
@@ -76,6 +83,9 @@ var service = function(config, $q, UtilService, AuthService) {
           name: data.displayName,
           timestamp: firebase.database.ServerValue.TIMESTAMP
         });
+        ref.child('auth_map').child(auth.uid).set(newUser.key);
+      } else {
+        ref.child('auth_map').child(auth.uid).set(user.id);
       }
     }, function(error) {
       console.log('error', error);
@@ -100,13 +110,14 @@ var service = function(config, $q, UtilService, AuthService) {
     return defer.promise;
   };
 
-  var createGuest = function(guest) {
+  var createGuest = function(me, guest) {
     var defer = $q.defer();
     var user = ref.child('user').push();
     user.set({
       id: user.key,
       email: guest.email,
       name: guest.name,
+      guest_of: me.id,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     }, function() {
       get(user.key).then(function(user) {

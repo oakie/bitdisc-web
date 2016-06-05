@@ -14,9 +14,11 @@ var directive = function(ModalService, GameService) {
       };
 
       $scope.openScoreInputModal = function(index) {
-        if(!$scope.editable) { return; }
+        if(!$scope.editable) {
+          return;
+        }
         var context = {id: 'score-input', data: {game: $scope.game, index: index}};
-        ModalService.open(context).then(function (val) {
+        ModalService.open(context).then(function(val) {
           console.log(val);
         });
       };
@@ -26,7 +28,7 @@ var directive = function(ModalService, GameService) {
           $scope.game = game;
         });
       };
-      
+
       $scope.init();
     }
   };

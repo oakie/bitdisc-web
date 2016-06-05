@@ -11,7 +11,9 @@ var ctrl = function($scope, $routeParams, UserService, CourseService, GameServic
   });
 
   $scope.init = function() {
-    if(!$scope.game) { return; }
+    if(!$scope.game) {
+      return;
+    }
     generateCharts($scope.game);
   };
 
@@ -23,7 +25,7 @@ var ctrl = function($scope, $routeParams, UserService, CourseService, GameServic
     var acc = {};
     acc.labels = [''];
     for(var i = 0; i < game.course.holes.length; ++i) {
-      acc.labels.push(i+1);
+      acc.labels.push(i + 1);
     }
 
     acc.datasets = [];
@@ -32,7 +34,7 @@ var ctrl = function($scope, $routeParams, UserService, CourseService, GameServic
 
       var d = [0];
       for(var j = 0; j < sub.splits.length; ++j) {
-        d.push(d[d.length-1] + sub.splits[j]);
+        d.push(d[d.length - 1] + sub.splits[j]);
       }
 
       var data = {
@@ -51,10 +53,12 @@ var ctrl = function($scope, $routeParams, UserService, CourseService, GameServic
   };
 
   $scope.$on('game-update', function(game) {
-    if(game.id !== $scope.params.id) { return; }
+    if(game.id !== $scope.params.id) {
+      return;
+    }
     $scope.game = game;
   });
-  
+
   $scope.init();
 };
 ctrl.$inject = ['$scope', '$routeParams', 'UserService', 'CourseService', 'GameService', 'ModalService'];

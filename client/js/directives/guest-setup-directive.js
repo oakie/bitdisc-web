@@ -9,8 +9,10 @@ var directive = function($location, UtilService, ModalService, UserService) {
       ModalService.register('guest-setup', $scope);
 
       $scope.init = function() {
-        if(!$scope.context) { return; }
-        $scope.guest = { name: '', email: '' };
+        if(!$scope.context) {
+          return;
+        }
+        $scope.guest = {name: '', email: ''};
       };
 
       $scope.$watch('context', function() {

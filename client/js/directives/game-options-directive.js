@@ -7,12 +7,14 @@ var directive = function($location, ModalService, CourseService, UserService, Ga
     scope: true,
     link: function($scope, $elem, $attr) {
       ModalService.register('game-options', $scope);
-      angular.element($elem.children()[0]).on('hidden.bs.modal', function () {
+      angular.element($elem.children()[0]).on('hidden.bs.modal', function() {
         $scope.defer.resolve('closed game options');
       });
 
       $scope.init = function() {
-        if(!$scope.context) { return; }
+        if(!$scope.context) {
+          return;
+        }
         $scope.defer = $scope.context.defer;
         $scope.game = $scope.context.game;
       };

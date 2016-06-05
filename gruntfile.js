@@ -1,21 +1,21 @@
 'use strict';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
   grunt.config.set('watch', {
     grunt: {
       files: ['gruntfile.js']
     },
     bitdisc_js: {
       files: ['client/js/**/*.js'],
-      tasks: ['build:js']
+      tasks: ['build-dev:js']
     },
     bitdisc_css: {
       files: ['client/css/**/*.css'],
-      tasks: ['build:css']
+      tasks: ['build-dev:css']
     },
     bitdisc_html: {
       files: ['client/html/**/*.html'],
-      tasks: ['build:html']
+      tasks: ['build-dev:html']
     }
   });
 
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
       banner: '/*! Grunt Uglify <%= grunt.template.today("yyyy-mm-dd") %> */ ',
       mangle: false
     },
-    build: {
+    app: {
       src: 'public/js/bundle.js',
       dest: 'public/js/bundle.min.js'
     }
@@ -104,18 +104,15 @@ module.exports = function (grunt) {
 
   grunt.config.set('concurrent', {
     target: {
-      tasks: ['nodemon:start', ['build:html', 'build:css', 'watch']],
+      tasks: ['nodemon:start', ['build-dev:html', 'build-dev:css', 'watch']],
       options: {
         logConcurrentOutput: true
       }
     }
   });
 
-  grunt.config.set('build', {
-    js: 'js',
-    css: 'css',
-    html: 'html'
-  });
+  grunt.config.set('build-prod', {js: 'js', css: 'css', html: 'html'});
+  grunt.config.set('build-dev', {js: 'js', css: 'css', html: 'html'});
 
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-concat-css');
@@ -127,15 +124,26 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-nodemon');
 
-  grunt.registerMultiTask('build', function () {
+  grunt.registerMultiTask('build-prod', function() {
     switch(this.target) {
       case 'js':
         grunt.task.run(['browserify', 'uglify']); break;
       case 'css':
         grunt.task.run(['concat_css', 'cssmin']); break;
       case 'html':
-        grunt.task.run(['html2js', 'build:js', 'copy']); break;
+        grunt.task.run(['html2js', 'build-prod:js', 'copy']); break;
+    }
+  });
+  grunt.registerMultiTask('build-dev', function() {
+    switch(this.target) {
+      case 'js':
+        grunt.task.run(['browserify']); break;
+      case 'css':
+        grunt.task.run(['concat_css']); break;
+      case 'html':
+        grunt.task.run(['html2js', 'build-dev:js', 'copy']); break;
     }
   });
   grunt.registerTask('default', ['concurrent']);
+  grunt.registerTask('prod', ['build-prod:html', 'build-prod:css'])
 };

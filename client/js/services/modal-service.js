@@ -36,7 +36,7 @@ var service = function(config, $q) {
     return defer.promise;
   };
 
-  var register = function (id, scope) {
+  var register = function(id, scope) {
     var elem = $('#' + id + '-modal .modal');
     elem.click(function(event) {
       event.stopPropagation();

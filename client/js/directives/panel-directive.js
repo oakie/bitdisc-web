@@ -15,9 +15,15 @@ var directive = function() {
     },
     link: function($scope, $elem, $attr, $ctrl, $transclude) {
       $scope.contains = {
-        body: function() { return $transclude.isSlotFilled('body'); },
-        list: function() { return $transclude.isSlotFilled('list'); },
-        table: function() { return $transclude.isSlotFilled('table'); }
+        body: function() {
+          return $transclude.isSlotFilled('body');
+        },
+        list: function() {
+          return $transclude.isSlotFilled('list');
+        },
+        table: function() {
+          return $transclude.isSlotFilled('table');
+        }
       };
     }
   };

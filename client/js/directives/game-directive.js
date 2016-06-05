@@ -8,7 +8,8 @@ var directive = function(GameService) {
       game: '=object'
     },
     link: function($scope, $elem, $attr) {
-      $scope.init = function() {};
+      $scope.init = function() {
+      };
 
       $attr.$observe('object', function() {
         GameService.get($scope.game.id).then(function(game) {
