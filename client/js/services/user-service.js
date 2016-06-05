@@ -110,18 +110,20 @@ var service = function(config, $q, UtilService, AuthService) {
     return defer.promise;
   };
 
-  var createGuest = function(me, guest) {
+  var createGuest = function(guest) {
     var defer = $q.defer();
-    var user = ref.child('user').push();
-    user.set({
-      id: user.key,
-      email: guest.email,
-      name: guest.name,
-      guest_of: me.id,
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    }, function() {
-      get(user.key).then(function(user) {
-        defer.resolve(user);
+    me().then(function(me) {
+      var user = ref.child('user').push();
+      user.set({
+        id: user.key,
+        email: guest.email,
+        name: guest.name,
+        guest_of: me.id,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      }, function() {
+        get(user.key).then(function(user) {
+          defer.resolve(user);
+        });
       });
     });
     return defer.promise;
