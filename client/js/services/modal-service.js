@@ -40,7 +40,7 @@ var service = function(config, $q) {
     var elem = $('#' + id + '-modal .modal');
     elem.click(function(event) {
       event.stopPropagation();
-      close(id);
+      close();
     });
     elem.find('.modal-dialog').click(function(event) {
       event.stopPropagation();

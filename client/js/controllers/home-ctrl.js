@@ -32,8 +32,7 @@ var ctrl = function($scope, UtilService, UserService, CourseService, GameService
 
   $scope.openGuestSetupModal = function() {
     var context = {id: 'guest-setup', data: {}};
-    var guestSetupPromise = ModalService.open(context);
-    guestSetupPromise.then(function(val) {
+    ModalService.open(context).then(function(val) {
       console.log(val);
       if(val) {
         $scope.friends.push(val);

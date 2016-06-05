@@ -56,6 +56,7 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
       $scope.addGuest = function() {
         var context = {id: 'guest-setup', data: {}};
         ModalService.open(context).then(function(guest) {
+          $scope.addPlayer(guest);
           console.log('game setup new guest: ', guest);
         });
       };

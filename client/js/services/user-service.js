@@ -102,8 +102,16 @@ var service = function(config, $q, UtilService, AuthService) {
 
   var createGuest = function(guest) {
     var defer = $q.defer();
-    me().then(function(user) {
-      defer.resolve(user);
+    var user = ref.child('user').push();
+    user.set({
+      id: user.key,
+      email: guest.email,
+      name: guest.name,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    }, function() {
+      get(user.key).then(function(user) {
+        defer.resolve(user);
+      });
     });
     return defer.promise;
   };

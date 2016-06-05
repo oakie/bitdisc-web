@@ -26,7 +26,8 @@
                         <li ng-class="{active: isActive('/courses')}"><a href="#/courses">Courses</a></li>
                         <li ng-class="{active: isActive('/users')}"><a href="#/users">Users</a></li>
                     </ul>
-                    <ul style="float: right;" class="nav navbar-nav">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-divider"></li>
                         <li ng-show="auth"><a ng-click="signOut()">Sign out</a></li>
                     </ul>
                 </div>

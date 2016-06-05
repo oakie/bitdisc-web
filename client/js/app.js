@@ -71,7 +71,6 @@ app.directive('glyph', require('./directives/glyphicon-directive'));
 
 /* Controllers */
 app.controller('NavCtrl', require('./controllers/nav-ctrl'));
-app.controller('ModalCtrl', require('./controllers/modal-ctrl'));
 app.controller('HomeCtrl', require('./controllers/home-ctrl'));
 app.controller('GamesCtrl', require('./controllers/games-ctrl'));
 app.controller('GameCtrl', require('./controllers/game-ctrl'));
