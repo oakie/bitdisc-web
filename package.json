@@ -23,6 +23,7 @@
     "grunt-contrib-cssmin": "^1.0.1",
     "grunt-contrib-uglify": "^0.6.0",
     "grunt-contrib-watch": "*",
+    "grunt-html2js": "^0.3.6",
     "grunt-nodemon": "*",
     "grunt-replace": "^1.0.1"
   },
