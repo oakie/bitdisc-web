@@ -97,8 +97,8 @@ module.exports = function(grunt) {
 
   grunt.config.set('nodemon', {
     start: {
-      script: 'app.js',
-      watch: ['app.js']
+      script: 'bitdisc.js',
+      watch: ['bitdisc.js']
     }
   });
 
