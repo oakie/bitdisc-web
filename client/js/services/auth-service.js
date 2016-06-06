@@ -40,7 +40,8 @@ var service = function(config, $q) {
 
   var signin = function(provider) {
     auth.signInWithPopup(providers[provider]).then(null, function(error) {
-      if(error && error.code === 'TRANSPORT_UNAVAILABLE') {
+      if(error) {
+        console.log('error: ' + error);
         auth.signInWithRedirect(providers[provider]).then(null, function(error) {
           console.log('error: ' + error);
         });
