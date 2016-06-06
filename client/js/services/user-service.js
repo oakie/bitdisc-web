@@ -31,15 +31,16 @@ var service = function(config, $q, UtilService, AuthService) {
     var defer = $q.defer();
     var promises = [];
 
-    if(user.friends) {
-      user.friends = UtilService.listify(user.friends);
-      for(var i = 0; i < user.friends.length; ++i) {
-        promises.push(get(user.friends[i]));
-      }
-    }
+    AuthService.authenticate().then(function(auth) {
+      ref.child('friend_map').child(user.id).once('value').then(function(snapshot) {
+        snapshot.forEach(function(child) {
+          promises.push(get(child.key));
+        });
 
-    $q.all(promises).then(function(items) {
-      defer.resolve(items);
+        $q.all(promises).then(function(friends) {
+          defer.resolve(friends);
+        });
+      });
     });
 
     return defer.promise;
@@ -85,6 +86,7 @@ var service = function(config, $q, UtilService, AuthService) {
         });
         ref.child('auth_map').child(auth.uid).set(newUser.key);
       } else {
+        ref.child('user').child(user.id).child('guest_of').remove();
         ref.child('auth_map').child(auth.uid).set(user.id);
       }
     }, function(error) {
