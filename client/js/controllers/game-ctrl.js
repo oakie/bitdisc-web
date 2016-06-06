@@ -5,6 +5,7 @@ var ctrl = function($scope, $routeParams, UserService, CourseService, GameServic
   $scope.game = null;
   $scope.params = $routeParams;
   $scope.chart = {};
+  $scope.pars = [];
 
   GameService.get($scope.params.id).then(function(game) {
     $scope.game = game;

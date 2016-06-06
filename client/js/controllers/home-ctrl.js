@@ -5,7 +5,6 @@ var ctrl = function($scope, UtilService, UserService, CourseService, GameService
 
   $scope.init = function() {
     UserService.me().then(function(user) {
-      console.log('me: ', user);
       $scope.me = user;
       UserService.getFriends(user).then(function(friends) {
         $scope.friends = friends;

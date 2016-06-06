@@ -10,7 +10,7 @@ var service = function(config, $q, UtilService, AuthService) {
     var firstTriplet = user.name.substring(0, Math.min(3, user.name.indexOf(' ')));
     var x = user.name.lastIndexOf(' ') + 1;
     var lastTriplet = user.name.substring(x, Math.min(x + 3, user.name.length));
-    return (firstTriplet + lastTriplet).toUpperCase();
+    return (firstTriplet + '\u200B' + lastTriplet).toUpperCase();
   };
 
   var list = function() {

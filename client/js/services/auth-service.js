@@ -14,9 +14,7 @@ var service = function(config, $q) {
   var queue = [];
 
   auth.onAuthStateChanged(function(user) {
-    console.log('auth service state changed', user);
     token = user;
-
     for(var key in authStateListeners) {
       if(authStateListeners.hasOwnProperty(key)) {
         authStateListeners[key](token);

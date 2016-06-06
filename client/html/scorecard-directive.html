@@ -5,18 +5,24 @@
     <table class="table table-striped table-hover">
         <thead>
         <tr>
-            <th ng-bind="'Hole'" class="col-md-1" />
+            <th ng-bind="'Hole'" class="col-sm-2" />
             <th ng-repeat="subgame in game.subgames" ng-bind="subgame.user.tag" />
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="hole in game.course.holes" ng-init="holeIndex = $index" ng-click="openScoreInputModal(holeIndex)">
-            <td ng-bind="(holeIndex + 1) + '.'" />
-            <td ng-repeat="subgame in game.subgames" ng-bind="subgame.splits | getat: holeIndex" />
+            <td ng-bind="(holeIndex + 1) + '. (' + hole.par + ')'" />
+            <td ng-repeat="subgame in game.subgames" ng-init="holeSplit = (subgame.splits | getat: holeIndex)">
+                <span ng-bind="holeSplit" />
+                <span ng-bind="'(' + totalDiffFromPar(subgame.splits, holeIndex) + ')'" />
+            </td>
         </tr>
         <tr>
             <th ng-bind="'Tot:'" />
-            <th ng-repeat="subgame in game.subgames" ng-bind="subgame.score()" />
+            <th ng-repeat="subgame in game.subgames">
+                <span ng-bind="subgame.score()" />
+                <span ng-bind="'(' + totalDiffFromPar(subgame.splits, game.course.holes.length - 1) + ')'" />
+            </th>
         </tr>
         </tbody>
     </table>

@@ -104,7 +104,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
   var create = function(setup) {
     var defer = $q.defer();
-    AuthService.authenticate().then(function(auth) {
+    UserService.me().then(function(me) {
       var promises = [];
       for(var i = 0; i < setup.players.length; ++i) {
         promises.push(createSubgame(setup.players[i], setup.course));
@@ -119,7 +119,7 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
         game.set({
           id: game.key,
-          owner: auth.uid,
+          owner: me.id,
           course: setup.course.id,
           subgames: subs,
           start: firebase.database.ServerValue.TIMESTAMP,

@@ -11,6 +11,7 @@ var directive = function(ModalService, GameService) {
     link: function($scope, $elem, $attr) {
       $scope.init = function() {
         $scope.editable = $scope.editable || false;
+        $scope.pars = calcAccumulatedPar($scope.game.course.holes);
       };
 
       $scope.openScoreInputModal = function(index) {
@@ -28,6 +29,24 @@ var directive = function(ModalService, GameService) {
           $scope.game = game;
         });
       };
+
+      $scope.totalDiffFromPar = function(splits, index) {
+        var p = 0;
+        for(var i = 0; i <= index; ++i) {
+          p += splits[i];
+        }
+        return p - $scope.pars[index];
+      };
+
+      var calcAccumulatedPar = function(holes) {
+        if(!holes || holes.length === 0) { return []; }
+        var p = [holes[0].par];
+        for(var i = 1; i < holes.length; ++i) {
+          p.push(p[p.length - 1] + holes[i].par);
+        }
+        return p;
+      };
+
 
       $scope.init();
     }
