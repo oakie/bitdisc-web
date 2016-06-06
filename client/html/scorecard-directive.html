@@ -11,10 +11,10 @@
         </thead>
         <tbody>
         <tr ng-repeat="hole in game.course.holes" ng-init="holeIndex = $index" ng-click="openScoreInputModal(holeIndex)">
-            <td ng-bind="(holeIndex + 1) + '. (' + hole.par + ')'" />
-            <td ng-repeat="subgame in game.subgames" ng-init="holeSplit = (subgame.splits | getat: holeIndex)">
-                <span ng-bind="holeSplit" />
-                <span ng-bind="'(' + totalDiffFromPar(subgame.splits, holeIndex) + ')'" />
+            <td ng-bind="(holeIndex + 1) + '.'" />
+            <td ng-repeat="subgame in game.subgames">
+                <span ng-bind="subgame.splits | getat: holeIndex" />
+                <span ng-show="(subgame.splits | getat: holeIndex) > 0" ng-bind="'(' + totalDiffFromPar(subgame.splits, holeIndex) + ')'" />
             </td>
         </tr>
         <tr>
