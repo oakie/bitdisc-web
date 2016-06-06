@@ -26,7 +26,7 @@ var directive = function(ModalService, GameService) {
 
       $scope.finish = function() {
         GameService.finish($scope.game).then(function(game) {
-          $scope.game = game;
+          $scope.$emit('message', {event: 'game-update', data: game});
         });
       };
 

@@ -1,5 +1,4 @@
 'use strict';
-var Chart = require('chart.js');
 
 var ctrl = function($scope, $routeParams, UserService, CourseService, GameService, ModalService) {
   $scope.game = null;
@@ -53,10 +52,8 @@ var ctrl = function($scope, $routeParams, UserService, CourseService, GameServic
     ModalService.open({id: 'game-options', game: $scope.game});
   };
 
-  $scope.$on('game-update', function(game) {
-    if(game.id !== $scope.params.id) {
-      return;
-    }
+  $scope.$on('game-update', function(_, game) {
+    if(game.id !== $scope.params.id) { return; }
     $scope.game = game;
   });
 

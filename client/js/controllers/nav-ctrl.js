@@ -29,6 +29,10 @@ var ctrl = function($scope, $location, AuthService) {
     $scope.apply();
   });
 
+  $scope.$on('message', function(_, context) {
+    $scope.$broadcast(context.event, context.data);
+  });
+
   $scope.init();
 };
 ctrl.$inject = ['$scope', '$location', 'AuthService'];
