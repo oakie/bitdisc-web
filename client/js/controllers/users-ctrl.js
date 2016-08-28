@@ -7,6 +7,11 @@ var ctrl = function($scope, UtilService, UserService) {
     });
   };
 
+  $scope.addFriend = function(friend) {
+    UserService.addFriend(friend).then(function(f) {
+      console.log('f: ' + f);
+    });
+  };
 
   $scope.init();
 };

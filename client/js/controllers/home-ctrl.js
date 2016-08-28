@@ -6,11 +6,11 @@ var ctrl = function($scope, UtilService, UserService, CourseService, GameService
   $scope.init = function() {
     UserService.me().then(function(user) {
       $scope.me = user;
-      UserService.getFriends(user).then(function(friends) {
-        if(friends.length > 0) {
-          $scope.friends = friends;
-        }
-      });
+    });
+    UserService.getFriends().then(function(friends) {
+      if(friends.length > 0) {
+        $scope.friends = friends;
+      }
     });
     UserService.list().then(function(items) {
       $scope.users = UtilService.listify(items);

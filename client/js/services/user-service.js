@@ -13,43 +13,86 @@ var service = function(config, $q, UtilService, AuthService) {
     return (firstTriplet + '\u200B' + lastTriplet).toUpperCase();
   };
 
+  var dList = null;
   var list = function() {
-    var defer = $q.defer();
+    if(dList) {
+      return dList.promise;
+    }
+    dList = $q.defer();
+    var promises = [];
+
     AuthService.authenticate().then(function(auth) {
       ref.child('user').once('value').then(function(snapshot) {
-        var users = snapshot.val();
-        for(var i = 0; i < users.length; ++i) {
-          users[i].tag = getUserTag(users[i]);
-        }
-        defer.resolve(users);
+        snapshot.forEach(function(user) {
+          promises.push(populateUser(user.val()));
+        });
+        $q.all(promises).then(function(users) {
+          dList.resolve(users);
+        });
+      });
+    });
+    return dList.promise;
+  };
+
+  var dFriends = null;
+  var getFriends = function() {
+    if(dFriends) {
+      return dFriends.promise;
+    }
+    dFriends = $q.defer();
+    var promises = [];
+
+    me().then(function(me) {
+      ref.child('friend_map').child(me.id).once('value').then(function(snapshot) {
+        snapshot.forEach(function(child) {
+          promises.push(get(child.key));
+        });
+        $q.all(promises).then(function(friends) {
+          dFriends.resolve(friends);
+        });
+      });
+    });
+    return dFriends.promise;
+  };
+
+  var isFriend = function(user) {
+    var defer = $q.defer();
+    me().then(function(me) {
+      ref.child('friend_map').child(me.id).child(user.id).once('value').then(function(snapshot) {
+        defer.resolve(snapshot.val());
       });
     });
     return defer.promise;
   };
 
-  var getFriends = function(user) {
+  var addFriend = function(friend) {
     var defer = $q.defer();
-    var promises = [];
-
-    AuthService.authenticate().then(function(auth) {
-      ref.child('friend_map').child(user.id).once('value').then(function(snapshot) {
-        snapshot.forEach(function(child) {
-          promises.push(get(child.key));
-        });
-
-        $q.all(promises).then(function(friends) {
-          defer.resolve(friends);
-        });
+    me().then(function(me) {
+      ref.child('friend_map').child(me.id).child(friend.id).set(true, function() {
+        defer.resolve();
       });
     });
+    return defer.promise;
+  };
 
+  var removeFriend = function(friend) {
+    var defer = $q.defer();
+    me().then(function(me) {
+      ref.child('friend_map').child(me.id).child(friend.id).remove(function() {
+        defer.resolve();
+      });
+    });
     return defer.promise;
   };
 
   var populateUser = function(user) {
     var defer = $q.defer();
     user.tag = getUserTag(user);
-    defer.resolve(user);
+    // isFriend(user).then(function(x) {
+    //   user.isFriend = x;
+    //   console.log(user);
+      defer.resolve(user);
+    // });
     return defer.promise;
   };
 
@@ -70,7 +113,7 @@ var service = function(config, $q, UtilService, AuthService) {
       return;
     }
     var data = auth.providerData[0];
-    ref.child('user').orderByChild('email').equalTo(data.email).once('value', function(snap) {
+    ref.child('user').orderByChild('email').equalTo(data.email).once('value').then(function(snap) {
       var user = null;
       snap.forEach(function(child) {
         user = child.val();
@@ -78,38 +121,46 @@ var service = function(config, $q, UtilService, AuthService) {
 
       if(!user) {
         var newUser = ref.child('user').push();
+        ref.child('auth_map').child(auth.uid).set(newUser.key);
         newUser.set({
           id: newUser.key,
           email: data.email,
           name: data.displayName,
           timestamp: firebase.database.ServerValue.TIMESTAMP
         });
-        ref.child('auth_map').child(auth.uid).set(newUser.key);
       } else {
-        ref.child('user').child(user.id).child('guest_of').remove();
         ref.child('auth_map').child(auth.uid).set(user.id);
+        ref.child('user').child(user.id).update({
+          guest_of: null,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
       }
     }, function(error) {
       console.log('error', error);
     });
   };
 
+  var dMe = null;
   var me = function() {
-    var defer = $q.defer();
+    if(dMe) {
+      return dMe.promise;
+    }
+    dMe = $q.defer();
+
     AuthService.authenticate().then(function(auth) {
-      ref.child('auth_map').child(auth.uid).once('value', function(snap) {
+      ref.child('auth_map').child(auth.uid).once('value').then(function(snap) {
         var id = snap.val();
         if(id) {
           get(id).then(function(user) {
-            defer.resolve(user);
+            dMe.resolve(user);
           });
         } else {
           console.log('unknown auth user', auth.uid);
-          defer.reject();
+          dMe.reject();
         }
       });
     });
-    return defer.promise;
+    return dMe.promise;
   };
 
   var createGuest = function(guest) {
@@ -122,7 +173,7 @@ var service = function(config, $q, UtilService, AuthService) {
         name: guest.name,
         guest_of: me.id,
         timestamp: firebase.database.ServerValue.TIMESTAMP
-      }, function() {
+      }).then(function() {
         get(user.key).then(function(user) {
           defer.resolve(user);
         });
@@ -131,7 +182,14 @@ var service = function(config, $q, UtilService, AuthService) {
     return defer.promise;
   };
 
+  var reset = function() {
+    dMe = null;
+    dList = null;
+    dFriends = null;
+  };
+
   AuthService.onAuth('user-service', function(auth) {
+    //reset();
     update(auth);
   });
 
@@ -141,6 +199,9 @@ var service = function(config, $q, UtilService, AuthService) {
     update: update,
     me: me,
     getFriends: getFriends,
+    isFriend: isFriend,
+    addFriend: addFriend,
+    removeFriend: removeFriend,
     createGuest: createGuest
   };
 };
