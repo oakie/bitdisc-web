@@ -1,7 +1,15 @@
 'use strict';
 
 var ctrl = function($scope, $location, AuthService) {
+  $scope.backdrop = null;
   $scope.init = function() {
+    $('.navbar-collapse').on('show.bs.collapse', function() {
+      $scope.backdrop = $('<div class="modal-backdrop fade in"></div>').appendTo(document.body);
+      $scope.backdrop.on('click', function() {
+        $('.navbar-collapse').collapse('hide');
+        $scope.backdrop.remove();
+      });
+    });
   };
 
   $scope.isActive = function(route) {

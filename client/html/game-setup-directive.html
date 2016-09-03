@@ -15,28 +15,20 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label" for="playerSelect">Select players</label>
-                        <ul style="padding-left: 0;">
-                            <li ng-repeat="user in setup.players | orderBy: 'name'" class="list-group-item">
-                                <user object="user">
-                                    <right>
-                                        <a class="btn btn-default" ng-click="removePlayer(user)"><glyph name="remove" /></a>
-                                    </right>
-                                </user>
+                        <b>Select players</b>
+                        <ul>
+                            <li ng-repeat="user in setup.players" class="list-group-item">
+                                <user object="user"></user>
                             </li>
-                            <li ng-show="setup.players.length === 0" ng-bind="'No players added'" class="list-group-item" />
+                            <li ng-show="!setup.players.length" ng-bind="'No players selected'" class="list-group-item" />
+                            <a class="list-group-item" ng-click="selectPlayers()">Select players</a>
                         </ul>
-                        <select class="form-control" id="playerSelect" ng-model="selectedPlayer" ng-options="user.name for user in users | orderBy: 'name' track by user.id" ng-change="addPlayer(selectedPlayer)">
-                            <option value="">Add a player</option>
-                        </select>
-                        <b>... or ...</b>
-                        <a class="btn btn-default form-control" ng-click="addGuest()">Create a guest player</a>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="proceed()">Start game</button>
+                <button type="button" class="btn btn-primary" ng-click="proceed()" ng-disabled="!setup.course || setup.players.length < 1">Start game</button>
             </div>
         </div>
     </div>

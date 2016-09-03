@@ -1,8 +1,6 @@
-<div>
-    <div ng-if="contains.left()" style="height: 30px; line-height: 30px; display: inline-block; margin-right: 15px;" ng-transclude="left"></div>
-    <div style="display: inline-block;">
-        <img ng-src="{{avatar}}" style="height: 30px;" />
-        <strong ng-bind="user.name" />
-    </div>
-    <div ng-if="contains.right()" class="pull-right" style="height: 30px; line-height: 30px;" ng-transclude="right"></div>
+<div style="width: 100%; line-height: 30px; height: 30px; display: -webkit-flex;">
+    <div ng-if="contains.left()" style="height: 100%; margin-right: 15px;" ng-transclude="left"></div>
+    <img ng-src="{{avatar}}" style="height: 100%;" />
+    <strong ng-bind="user.name" style="white-space: nowrap; flex: 1; overflow: hidden; text-overflow: ellipsis; margin-left: 10px;" />
+    <div ng-if="contains.right()" class="pull-right" style="height: 100%;" ng-transclude="right"></div>
 </div>

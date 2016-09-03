@@ -6,6 +6,10 @@ a {
     cursor: pointer;
 }
 
+ul {
+    padding-left: 0;
+}
+
 .text-white {
     color: white;
 }
@@ -33,6 +37,7 @@ a {
     color: #337ab7;
 }
 
-.modal {
-    -webkit-overflow-scrolling: auto;
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
 }

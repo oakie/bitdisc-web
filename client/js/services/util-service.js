@@ -9,8 +9,30 @@ var service = function() {
     return list;
   };
 
+  var keys = function(dict) {
+    var keys = [];
+    for(var key in dict) {
+      if(dict.hasOwnProperty(key)) {
+        keys.push(key);
+      }
+    }
+    return keys;
+  };
+
+  var values = function(dict) {
+    var values = [];
+    for(var key in dict) {
+      if(dict.hasOwnProperty(key)) {
+        values.push(dict[key]);
+      }
+    }
+    return values;
+  };
+
   return {
-    listify: listify
+    listify: listify,
+    keys: keys,
+    values: values
   };
 };
 service.$inject = [];

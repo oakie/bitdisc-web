@@ -40,19 +40,13 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
         ModalService.close();
       };
 
-      $scope.addPlayer = function(user) {
-        if($scope.setup.players.indexOf(user) > -1) {
-          return;
-        }
-        $scope.setup.players.push(user);
-        $scope.selectedPlayer = null;
-      };
-
-      $scope.removePlayer = function(user) {
-        var index = $scope.setup.players.indexOf(user);
-        if(index > -1) {
-          $scope.setup.players.splice(index, 1);
-        }
+      $scope.selectPlayers = function() {
+        var context = {id: 'user-select', data: {selected: $scope.setup.players}};
+        ModalService.open(context).then(function(selected) {
+          if(selected) {
+            $scope.setup.players = angular.copy(selected);
+          }
+        });
       };
 
       $scope.addGuest = function() {
@@ -60,7 +54,7 @@ var directive = function($location, UtilService, ModalService, CourseService, Us
         ModalService.open(context).then(function(guest) {
           console.log('game setup new guest: ', guest);
           if(guest) {
-            $scope.addPlayer(guest);
+            $scope.setup.players.push(guest);
           }
         });
       };
