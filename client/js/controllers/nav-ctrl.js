@@ -2,15 +2,22 @@
 
 var ctrl = function($scope, $location, AuthService) {
   $scope.backdrop = null;
+
   $scope.init = function() {
-    $('.navbar-collapse').on('show.bs.collapse', function() {
-      $scope.backdrop = $('<div class="modal-backdrop fade in"></div>').appendTo(document.body);
-      $scope.backdrop.on('click', function() {
-        $('.navbar-collapse').collapse('hide');
-        $scope.backdrop.remove();
-      });
+    $('#navbar').on('show.bs.collapse', function() {
+      $scope.backdrop = $('<div class="modal-backdrop fade in" style="z-index: 1029;"></div>').appendTo(document.body);
+      $scope.backdrop.on('click', $scope.hideBackdrop);
     });
   };
+
+  $scope.hideBackdrop = function() {
+    $('#navbar').collapse('hide');
+    if($scope.backdrop) {
+      $scope.backdrop.remove();
+    }
+  };
+  $('#navbar').find('ul > li > a').on('click', $scope.hideBackdrop);
+
 
   $scope.isActive = function(route) {
     return route === $location.path();

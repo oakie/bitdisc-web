@@ -2,10 +2,18 @@
 
 var ctrl = function($scope, UtilService, UserService, CourseService, GameService, ModalService) {
   $scope.me = null;
+  $scope.limit = {
+    games: 5,
+    friends: 10,
+    courses: 5
+  };
 
   $scope.init = function() {
     UserService.me().then(function(user) {
       $scope.me = user;
+      GameService.userGames($scope.me).then(function(items) {
+        $scope.games = UtilService.listify(items);
+      });
     });
     UserService.getFriends().then(function(friends) {
       if(friends.length > 0) {
@@ -17,9 +25,6 @@ var ctrl = function($scope, UtilService, UserService, CourseService, GameService
     });
     CourseService.list().then(function(items) {
       $scope.courses = UtilService.listify(items);
-    });
-    GameService.list().then(function(items) {
-      $scope.games = UtilService.listify(items);
     });
   };
 

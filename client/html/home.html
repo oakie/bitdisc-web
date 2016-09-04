@@ -32,40 +32,43 @@
 
 <div class="row">
     <div class="col-md-4">
-        <panel ng-show="me" heading="me.name + '\'s friends'">
-            <panel-list>
-                <a ng-repeat="friend in friends | orderBy: 'name'" class="list-group-item">
-                    <user object="friend"></user>
-                </a>
-                <li ng-show="!friends" ng-bind="'No friends'" class="list-group-item" />
-            </panel-list>
-        </panel>
-    </div>
-
-    <div class="col-md-4">
-        <panel heading="'Courses'">
-            <panel-list>
-                <a ng-repeat="course in courses" class="list-group-item" href="#/course/{{course.id}}">
-                    <course object="course"></course>
-                </a>
-                <li ng-show="!courses" ng-bind="'No courses'" class="list-group-item" />
-            </panel-list>
-        </panel>
-    </div>
-
-    <div class="col-md-4">
         <panel>
             <panel-head>
-                <span class="h4"><a href="#/games" style="color: white;">Latest games</a></span>
+                <span class="h4"><a href="#/games" style="color: white;">Your latest games</a></span>
                 <a class="pull-right text-white" ng-click="openGameSetupModal()"><glyph name="plus" /></a>
                 <span class="clearfix" />
             </panel-head>
             <panel-list>
-                <a ng-repeat="game in games | orderBy: '-start' | limitTo: 10" class="list-group-item" href="#/game/{{game.id}}">
+                <a ng-repeat="game in games | orderBy: '-start' | limitTo: limit.games" class="list-group-item" href="#/game/{{game.id}}">
                     <span class="badge" style="margin-left: 10px;" ng-bind="game.subgames.length"></span>
                     <game object="game"></game>
                 </a>
-                <li ng-show="!games" ng-bind="'No games'" class="list-group-item" />
+                <li ng-show="!games" ng-bind="'No games'" class="list-group-item"></li>
+                <a ng-show="games.length > limit.games" ng-bind="'Show more'" class="list-group-item" ng-click="limit.games = limit.games * 2"></a>
+            </panel-list>
+        </panel>
+    </div>
+
+    <div class="col-md-4">
+        <panel ng-show="me" heading="'Your friends'">
+            <panel-list>
+                <a ng-repeat="friend in friends | orderBy: 'name' | limitTo: limit.friends" class="list-group-item">
+                    <user object="friend"></user>
+                </a>
+                <li ng-show="!friends" ng-bind="'No friends'" class="list-group-item"></li>
+                <a ng-show="friends.length > limit.friends" ng-bind="'Show more'" class="list-group-item" ng-click="limit.friends = limit.friends * 2"></a>
+            </panel-list>
+        </panel>
+    </div>
+
+    <div class="col-md-4">
+        <panel heading="'Your courses'">
+            <panel-list>
+                <a ng-repeat="course in courses | limitTo: limit.courses" class="list-group-item" href="#/course/{{course.id}}">
+                    <course object="course"></course>
+                </a>
+                <li ng-show="!courses" ng-bind="'No courses'" class="list-group-item"></li>
+                <a ng-show="courses.length > limit.courses" ng-bind="'Show more'" class="list-group-item" ng-click="limit.courses = limit.courses * 2"></a>
             </panel-list>
         </panel>
     </div>

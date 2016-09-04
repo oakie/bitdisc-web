@@ -1,6 +1,6 @@
 'use strict';
 
-var service = function(config, $q, AuthService, CourseService, UserService) {
+var service = function(config, $q, AuthService, CourseService, UserService, UtilService) {
   var ref = firebase.database().ref();
 
   var getGame = function(id) {
@@ -15,6 +15,10 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
     var defer = $q.defer();
     ref.child('subgame').child(id).once('value').then(function(snapshot) {
       var subgame = snapshot.val();
+      if(!subgame) {
+        defer.resolve(null);
+        return;
+      }
       subgame.score = function() {
         var s = 0;
         if(!subgame.splits) {
@@ -82,6 +86,44 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
       ref.child('game').once('value').then(function(snapshot) {
         defer.resolve(snapshot.val());
       });
+    });
+    return defer.promise;
+  };
+
+  var fatList = function() {
+    var defer = $q.defer();
+    list().then(function(games) {
+      games = UtilService.listify(games);
+      var promises = [];
+      for(var i = 0; i < games.length; ++i) {
+        promises.push(populateGame(games[i]));
+      }
+      $q.all(promises).then(function (games) {
+        defer.resolve(games);
+      });
+    });
+    return defer.promise;
+  };
+
+  var userGames = function(user) {
+    var defer = $q.defer();
+    fatList().then(function(games) {
+      var result = [];
+      if(!games) { return result; }
+
+      for(var i = 0; i < games.length; ++i) {
+        var game = games[i];
+        if(!game) { continue; }
+        for(var j = 0; j < game.subgames.length; ++j) {
+          var subgame = game.subgames[j];
+          if(!subgame || !subgame.user) { continue; }
+          if(subgame.user.id === user.id) {
+            result.push(game);
+            break;
+          }
+        }
+      }
+      defer.resolve(result);
     });
     return defer.promise;
   };
@@ -178,6 +220,8 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
 
   return {
     list: list,
+    fatList: fatList,
+    userGames: userGames,
     get: get,
     create: create,
     remove: remove,
@@ -185,5 +229,5 @@ var service = function(config, $q, AuthService, CourseService, UserService) {
     finish: finish
   };
 };
-service.$inject = ['Config', '$q', 'AuthService', 'CourseService', 'UserService'];
+service.$inject = ['Config', '$q', 'AuthService', 'CourseService', 'UserService', 'UtilService'];
 module.exports = service;
