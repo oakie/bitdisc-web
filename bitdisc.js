@@ -5,8 +5,8 @@ var config = require('./config');
 
 var app = express();
 
-app.use('/public/img', express.static('./public/img'));
-app.use('/public/fonts', express.static('./public/fonts'));
+app.use('/public/img', express.static(__dirname + '/public/img'));
+app.use('/public/fonts', express.static(__dirname + '/public/fonts'));
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/public/html/index.html');
 });
