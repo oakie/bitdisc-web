@@ -17,7 +17,8 @@ app.constant('VERSION', require('../../package.json').version);
 app.constant('Config', config);
 
 /* Routes */
-app.config(function($routeProvider) {
+app.config(function($routeProvider, $locationProvider) {
+  $locationProvider.hashPrefix('');
   $routeProvider.when('/', {
     templateUrl: 'home.html',
     controller: 'HomeCtrl'
